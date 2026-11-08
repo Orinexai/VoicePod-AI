@@ -1,0 +1,6 @@
+{
+  "name": "VoicePod AI - Conversational AI Voice Agents",
+  "description": "Enterprise-grade autonomous conversational AI voice agents for 24/7 customer support, intelligent lead qualification, and automated appointment scheduling.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
