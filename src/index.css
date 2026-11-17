@@ -27,6 +27,17 @@
     font-family: 'JetBrains Mono', monospace;
     letter-spacing: -0.01em;
   }
+
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [role="button"]:focus-visible,
+  [tabindex]:focus-visible {
+    outline: 2px solid #22d3ee;
+    outline-offset: 2px;
+  }
 }
 
 /* Custom Scrollbar */
@@ -177,3 +188,87 @@
   animation: fadeIn 0.2s ease-out forwards;
 }
 
+@keyframes skeletonShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.skeleton-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(15, 23, 42, 0.9) 0%,
+    rgba(30, 41, 59, 0.85) 35%,
+    rgba(6, 182, 212, 0.14) 50%,
+    rgba(30, 41, 59, 0.85) 65%,
+    rgba(15, 23, 42, 0.9) 100%
+  );
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.6s ease-in-out infinite;
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-page-enter {
+  animation: pageEnter 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Intersection Observer Scroll-Reveal System */
+.reveal-base {
+  transition-property: opacity, transform;
+  transition-duration: 680ms;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-base[data-revealed='false'][data-reveal='fade-up'] {
+  opacity: 0;
+  transform: translate3d(0, 26px, 0);
+}
+
+.reveal-base[data-revealed='false'][data-reveal='slide-up'] {
+  opacity: 0;
+  transform: translate3d(0, 40px, 0) scale(0.985);
+}
+
+.reveal-base[data-revealed='false'][data-reveal='fade-in'] {
+  opacity: 0;
+  transform: scale(0.985);
+}
+
+.reveal-base[data-revealed='false'][data-reveal='slide-left'] {
+  opacity: 0;
+  transform: translate3d(-28px, 0, 0);
+}
+
+.reveal-base[data-revealed='false'][data-reveal='slide-right'] {
+  opacity: 0;
+  transform: translate3d(28px, 0, 0);
+}
+
+.reveal-base[data-revealed='true'] {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-base,
+  .reveal-base[data-revealed='false'] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+    will-change: auto !important;
+  }
+}

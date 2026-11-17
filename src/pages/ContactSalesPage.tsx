@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
-import { Mail, MapPin, Send, CheckCircle2, ShieldCheck, Loader2, AlertCircle } from 'lucide-react';
+import { Mail, MapPin, Send, CheckCircle2, Loader2, AlertCircle } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { OFFICE_INFO, ROBOT_ASSETS } from '../data/voicepodSiteData';
 import { submitToWebhook } from '../utils/webhook';
+import { MediaFrame } from '../components/MediaFrame';
+import { ScrollReveal } from '../components/ScrollReveal';
+import { SvgShieldGuardIcon, SvgTelephonyNodeIcon } from '../components/ModernSvgVisuals';
 
 export const ContactSalesPage: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
@@ -33,7 +36,7 @@ export const ContactSalesPage: React.FC = () => {
         company: formData.company.trim(),
         phone: formData.phone.trim(),
         message: formData.message.trim(),
-        useCase: formData.useCase,
+        useCase: formData.useCase
       });
 
       setSubmitted(true);
@@ -56,19 +59,18 @@ export const ContactSalesPage: React.FC = () => {
 
   return (
     <div className="pt-28 pb-20">
-      
       {/* Header */}
-      <section className="py-16 bg-[#080b18] border-b border-slate-800 text-center relative overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-cyan-600/10 blur-[130px] pointer-events-none" />
-        <div className="max-w-4xl mx-auto px-4 relative z-10 space-y-4">
-          <span className="text-xs font-mono text-cyan-400 uppercase tracking-widest bg-cyan-950/80 px-3 py-1 rounded-full border border-cyan-500/30">
-            Get In Touch
-          </span>
-          <h1 className="text-4xl sm:text-5xl font-black text-white tracking-tight">
-            Contact Sales — Let’s Start Creating Together!
+      <section className="py-16 bg-[#080b18] border-b border-slate-800 text-center">
+        <div className="max-w-4xl mx-auto px-4 space-y-4">
+          <div className="inline-flex items-center gap-2 text-xs font-medium text-cyan-400">
+            <SvgTelephonyNodeIcon className="w-5 h-5" />
+            <span>Solutions Engineering &amp; Enterprise Sales</span>
+          </div>
+          <h1 className="text-[clamp(2.25rem,4vw,3.25rem)] font-black text-white tracking-tight [text-wrap:balance]">
+            Contact Sales — Let&apos;s Build Your Voice Pipeline
           </h1>
           <p className="text-slate-300 text-base max-w-2xl mx-auto leading-relaxed">
-            Ready to transform your phone operations? Talk directly with our AI solutions engineering team to build a tailored voice automation system.
+            Ready to automate your phone operations? Speak directly with our engineering team to design a custom AI voice system for your business.
           </p>
         </div>
       </section>
@@ -76,15 +78,14 @@ export const ContactSalesPage: React.FC = () => {
       {/* Main Contact Grid */}
       <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          
           {/* Left Column: Office & Contact Info */}
-          <div className="lg:col-span-5 space-y-8">
-            <div className="space-y-4">
+          <ScrollReveal variant="fade-up" className="lg:col-span-5 space-y-8">
+            <div className="space-y-3">
               <h2 className="text-2xl font-bold text-white">
-                Empower Your Business With VoicePod AI
+                Partner With VoicePod Engineering
               </h2>
               <p className="text-sm text-slate-300 leading-relaxed">
-                Whether you need a single 24/7 virtual receptionist or a high-concurrency multi-agent call center deployment, our team provides complete turnkey implementation.
+                Whether you need a 24/7 virtual receptionist or high-concurrency call center deployment, our team handles end-to-end architecture and integration.
               </p>
             </div>
 
@@ -104,15 +105,16 @@ export const ContactSalesPage: React.FC = () => {
                   >
                     {OFFICE_INFO.address}
                   </a>
-                  <p className="text-[11px] text-slate-500 font-mono mt-0.5">England and Wales · Registered Entity</p>
+                  <p className="text-[11px] text-slate-500 font-mono mt-0.5">
+                    England and Wales · Registered Entity
+                  </p>
                 </div>
               </div>
 
               {/* Office Location Interactive Map Widget */}
               <div className="rounded-2xl overflow-hidden border border-slate-800 bg-slate-950/80 shadow-lg">
                 <div className="px-3.5 py-2 bg-slate-900 border-b border-slate-800/80 flex items-center justify-between text-[11px] font-mono">
-                  <span className="text-slate-300 flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+                  <span className="text-slate-300">
                     Tech Future Solutions Ltd · Registered Office
                   </span>
                   <a
@@ -137,20 +139,21 @@ export const ContactSalesPage: React.FC = () => {
                     href={OFFICE_INFO.mapUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="absolute bottom-2 left-2 px-2.5 py-1 rounded-lg bg-slate-950/90 border border-cyan-500/40 text-[10px] font-mono text-cyan-300 backdrop-blur-md hover:border-cyan-400 transition-colors"
+                    className="absolute bottom-2 left-2 px-2.5 py-1 rounded-lg bg-slate-950/90 border border-cyan-500/40 text-[10px] font-mono text-cyan-300 backdrop-blur-md hover:border-cyan-400 transition-colors inline-flex items-center gap-1.5"
                   >
-                    📍 Tech Future Solutions Ltd
+                    <MapPin className="w-3 h-3 text-cyan-400" />
+                    <span>Tech Future Solutions Ltd</span>
                   </a>
                 </div>
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-purple-400 shrink-0">
+                <div className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-cyan-400 shrink-0">
                   <Mail className="w-5 h-5" />
                 </div>
                 <div>
                   <h3 className="text-sm font-bold text-white">Email Address</h3>
-                  <p className="text-xs text-slate-400 mt-0.5">Get in Touch!</p>
+                  <p className="text-xs text-slate-400 mt-0.5">Direct Engineering Desk</p>
                   <a href={`mailto:${OFFICE_INFO.email}`} className="text-xs text-cyan-400 font-mono hover:underline">
                     {OFFICE_INFO.email}
                   </a>
@@ -158,34 +161,30 @@ export const ContactSalesPage: React.FC = () => {
               </div>
             </div>
 
-            {/* 3D AI Robot Assistant Visual Card */}
-            <div className="rounded-3xl bg-slate-900/80 border border-cyan-500/30 p-6 relative overflow-hidden shadow-xl shadow-cyan-950/30">
-              <div className="relative w-full h-52 flex items-center justify-center animate-float-robot">
-                <div className="absolute w-[180px] h-[180px] bg-cyan-500/20 rounded-full blur-[50px] animate-pulse-aura" />
-                <img
-                  src={ROBOT_ASSETS.hero}
-                  alt="VoicePod AI Concierge"
-                  onError={(e) => {
-                    e.currentTarget.onerror = null;
-                    e.currentTarget.src = ROBOT_ASSETS.avatarFallback;
-                  }}
-                  className="w-full h-full object-contain filter drop-shadow-[0_20px_40px_rgba(6,182,212,0.45)] hover:scale-105 transition-transform duration-500"
+            {/* London Office Visual Showcase Card */}
+            <div className="rounded-2xl bg-slate-900/70 border border-slate-800 overflow-hidden shadow-lg">
+              <div className="h-48 w-full relative">
+                <MediaFrame
+                  src={ROBOT_ASSETS.concierge}
+                  fallbackSrc={ROBOT_ASSETS.bannerFallback}
+                  alt="VoicePod London Solutions Engineering Studio"
+                  className="w-full h-full"
+                  imgClassName="w-full h-full object-cover"
                 />
-              </div>
-              <div className="text-center pt-2">
-                <div className="inline-flex items-center gap-1.5 text-[11px] font-mono text-cyan-300 bg-cyan-950/80 px-2.5 py-1 rounded-full border border-cyan-500/30">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  <span>Solutions Engineering Team Ready</span>
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent pointer-events-none" />
+                <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-xs font-mono text-slate-200">
+                  <span>London Solutions Team</span>
+                  <span className="text-cyan-300">24h Response SLA</span>
                 </div>
               </div>
             </div>
 
-            <div className="p-6 rounded-3xl bg-slate-900/60 border border-slate-800 space-y-2 text-xs">
+            <div className="p-6 rounded-2xl bg-slate-900/60 border border-slate-800 space-y-2 text-xs">
               <div className="flex items-center gap-2 text-emerald-400 font-semibold font-mono">
-                <ShieldCheck className="w-4 h-4" />
-                Data Protection & Privacy Notice
+                <SvgShieldGuardIcon className="w-5 h-5" />
+                <span>Data Protection &amp; Privacy Notice</span>
               </div>
-              <p className="text-slate-300 leading-relaxed font-light">
+              <p className="text-slate-300 leading-relaxed">
                 We take data protection seriously. Please contact us at{' '}
                 <a href="mailto:support@voicepod.ai" className="text-cyan-400 underline font-mono">
                   support@voicepod.ai
@@ -196,10 +195,10 @@ export const ContactSalesPage: React.FC = () => {
                 {OFFICE_INFO.legalEntity}.
               </p>
             </div>
-          </div>
+          </ScrollReveal>
 
           {/* Right Column: Contact Form */}
-          <div className="lg:col-span-7">
+          <ScrollReveal variant="slide-up" delay={100} className="lg:col-span-7">
             <div className="rounded-3xl bg-slate-900/60 border border-slate-800 p-8 shadow-2xl relative">
               {!submitted ? (
                 <form onSubmit={handleSubmit} className="space-y-5">
@@ -247,7 +246,7 @@ export const ContactSalesPage: React.FC = () => {
                         required
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        placeholder="+1 (555) 019-2834"
+                        placeholder="+44 20 7946 0192"
                         className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs sm:text-sm text-white focus:outline-none focus:border-cyan-500/60"
                       />
                     </div>
@@ -272,16 +271,18 @@ export const ContactSalesPage: React.FC = () => {
                         onChange={(e) => setFormData({ ...formData, useCase: e.target.value })}
                         className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:border-cyan-500/60"
                       >
-                        <option>Inbound Customer Support & Triage</option>
+                        <option>Inbound Customer Support &amp; Triage</option>
                         <option>Outbound Speed-to-Lead Qualification</option>
-                        <option>Appointment Scheduling & Calendar Sync</option>
-                        <option>Custom Telephony & High Concurrency</option>
+                        <option>Appointment Scheduling &amp; Calendar Sync</option>
+                        <option>Custom Telephony &amp; High Concurrency</option>
                       </select>
                     </div>
                   </div>
 
                   <div className="space-y-1.5">
-                    <label className="text-xs font-medium text-slate-300">Message / Workflows You Wish to Automate</label>
+                    <label className="text-xs font-medium text-slate-300">
+                      Message / Workflows You Wish to Automate
+                    </label>
                     <textarea
                       rows={4}
                       value={formData.message}
@@ -301,7 +302,7 @@ export const ContactSalesPage: React.FC = () => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-cyan-400 via-teal-300 to-cyan-400 hover:from-cyan-300 disabled:opacity-60 disabled:cursor-not-allowed text-slate-950 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-xl shadow-cyan-950 transition-all cursor-pointer"
+                    className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-cyan-400 to-teal-300 hover:from-cyan-300 disabled:opacity-60 disabled:cursor-not-allowed text-slate-950 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-xl shadow-cyan-950 transition-all cursor-pointer"
                   >
                     {isSubmitting ? (
                       <>
@@ -327,18 +328,16 @@ export const ContactSalesPage: React.FC = () => {
                   </p>
                   <button
                     onClick={() => setSubmitted(false)}
-                    className="mt-4 px-6 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold"
+                    className="mt-4 px-6 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold cursor-pointer"
                   >
                     Send Another Inquiry
                   </button>
                 </div>
               )}
             </div>
-          </div>
-
+          </ScrollReveal>
         </div>
       </section>
-
     </div>
   );
 };

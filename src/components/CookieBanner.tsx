@@ -53,10 +53,25 @@ export const CookieBanner: React.FC<CookieBannerProps> = ({ onNavigate, forceOpe
     onClose?.();
   };
 
+  useEffect(() => {
+    if (!isVisible) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        handleDismiss();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  });
+
   if (!isVisible) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 sm:left-6 sm:right-auto sm:max-w-md z-50 animate-slide-up">
+    <div
+      role="region"
+      aria-label="Cookie settings"
+      className="fixed bottom-4 left-4 right-4 sm:left-6 sm:right-auto sm:max-w-md z-50 animate-slide-up"
+    >
       <div className="rounded-2xl bg-[#0b0e1b]/95 border border-cyan-500/40 p-5 shadow-2xl backdrop-blur-xl text-white space-y-4">
         
         {/* Top Header */}

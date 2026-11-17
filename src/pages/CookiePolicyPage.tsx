@@ -1,6 +1,7 @@
 import React from 'react';
 import { Cookie, Info, ArrowLeft, CheckCircle2, Shield } from 'lucide-react';
 import { PageId } from '../components/Navbar';
+import { ScrollReveal } from '../components/ScrollReveal';
 
 interface CookiePolicyPageProps {
   onNavigate: (page: PageId) => void;
@@ -40,7 +41,7 @@ export const CookiePolicyPage: React.FC<CookiePolicyPageProps> = ({ onNavigate }
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12 text-slate-300 text-sm leading-relaxed font-light">
         
         {/* Intro */}
-        <section className="space-y-4">
+        <ScrollReveal as="section" variant="fade-up" className="space-y-4">
           <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2.5">
             <span className="w-2 h-5 bg-cyan-400 rounded-full" />
             <span>1. What Are Cookies?</span>
@@ -51,10 +52,10 @@ export const CookiePolicyPage: React.FC<CookiePolicyPageProps> = ({ onNavigate }
           <p>
             This Cookie Policy explains how <strong className="text-white">Tech Future Solutions Ltd</strong> (registered in England and Wales, company number 16669292, registered office 5 Brayford Square, London. E1 0SG) utilizes cookies on voicepod.ai.
           </p>
-        </section>
+        </ScrollReveal>
 
         {/* Categories of Cookies */}
-        <section className="space-y-6">
+        <ScrollReveal as="section" variant="fade-up" className="space-y-6">
           <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2.5">
             <span className="w-2 h-5 bg-cyan-400 rounded-full" />
             <span>2. Categories of Cookies We Use</span>
@@ -91,10 +92,10 @@ export const CookiePolicyPage: React.FC<CookiePolicyPageProps> = ({ onNavigate }
               </p>
             </div>
           </div>
-        </section>
+        </ScrollReveal>
 
         {/* Section 3: Managing Cookies */}
-        <section className="space-y-4">
+        <ScrollReveal as="section" variant="fade-up" className="space-y-4">
           <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2.5">
             <span className="w-2 h-5 bg-cyan-400 rounded-full" />
             <span>3. How to Control or Delete Cookies</span>
@@ -111,10 +112,10 @@ export const CookiePolicyPage: React.FC<CookiePolicyPageProps> = ({ onNavigate }
           <p className="text-xs text-slate-400 pt-2">
             Please note that blocking essential cookies may affect the proper loading or functionality of interactive site demos and customer forms.
           </p>
-        </section>
+        </ScrollReveal>
 
         {/* Section 4: Contact */}
-        <section className="space-y-4">
+        <ScrollReveal as="section" variant="fade-up" className="space-y-4">
           <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2.5">
             <span className="w-2 h-5 bg-cyan-400 rounded-full" />
             <span>4. Contact Information</span>
@@ -126,7 +127,7 @@ export const CookiePolicyPage: React.FC<CookiePolicyPageProps> = ({ onNavigate }
             </a>
             .
           </p>
-        </section>
+        </ScrollReveal>
 
       </div>
     </div>

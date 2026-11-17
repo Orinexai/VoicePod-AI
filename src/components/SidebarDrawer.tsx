@@ -1,7 +1,14 @@
-import React, { useEffect } from 'react';
-import { X, ArrowRight, PhoneCall, Mail, MapPin, Sparkles, Facebook, Instagram, Youtube } from 'lucide-react';
+import React, { useRef } from 'react';
+import { X, ArrowRight, PhoneCall, Mail, MapPin, Facebook, Instagram, Youtube } from 'lucide-react';
 import { PageId } from './Navbar';
 import { OFFICE_INFO } from '../data/voicepodSiteData';
+import { useDialogA11y } from '../hooks/useDialogA11y';
+import {
+  SvgTelephonyNodeIcon,
+  SvgWorkflowCalendarIcon,
+  SvgAnalyticsPulseIcon,
+  SvgVoiceCoreIcon
+} from './ModernSvgVisuals';
 
 interface SidebarDrawerProps {
   isOpen: boolean;
@@ -10,28 +17,8 @@ interface SidebarDrawerProps {
 }
 
 export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({ isOpen, onClose, onNavigate }) => {
-  // Close on Escape key press
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
-        onClose();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
-
-  // Lock body scroll when open
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isOpen]);
+  const drawerRef = useRef<HTMLElement | null>(null);
+  useDialogA11y(isOpen, onClose, drawerRef);
 
   if (!isOpen) return null;
 
@@ -52,7 +39,12 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({ isOpen, onClose, o
 
       {/* Drawer content */}
       <aside
-        className="relative z-10 w-84 sm:w-[380px] max-w-[88vw] h-full bg-[#0b0e19] border-r border-slate-800/80 shadow-2xl flex flex-col justify-between overflow-y-auto p-6 sm:p-7 text-white animate-slide-right transition-transform"
+        ref={drawerRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="About VoicePod and navigation drawer"
+        tabIndex={-1}
+        className="relative z-10 w-84 sm:w-[380px] max-w-[88vw] h-full bg-[#0b0e19] border-r border-slate-800/80 shadow-2xl flex flex-col justify-between overflow-y-auto p-6 sm:p-7 text-white animate-slide-right transition-transform focus:outline-none"
       >
         <div className="space-y-6">
           
@@ -81,13 +73,13 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({ isOpen, onClose, o
             </button>
           </div>
 
-          {/* Authentic About Us section (Replaced filler text completely) */}
+          {/* Authentic About Us section */}
           <div className="space-y-2.5">
             <div className="flex items-center gap-2 text-xs font-mono text-cyan-400 uppercase tracking-wider font-semibold">
-              <Sparkles className="w-3.5 h-3.5" />
+              <SvgVoiceCoreIcon className="w-4 h-4" />
               <span>About VoicePod</span>
             </div>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-light">
+            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
               VOICEPOD is an enterprise conversational AI voice automation platform engineered by Tech Future Solutions Ltd. We deploy autonomous, human-like voice agents that operate 24/7/365 to handle customer support, outbound speed-to-lead qualification, and live calendar appointment scheduling with sub-300ms latency.
             </p>
           </div>
@@ -103,12 +95,12 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({ isOpen, onClose, o
                 className="w-full p-3 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-cyan-500/50 flex items-center justify-between text-left transition-colors cursor-pointer group"
               >
                 <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-lg bg-cyan-950 text-cyan-400 flex items-center justify-center text-xs">
-                    📞
+                  <div className="w-8 h-8 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-center shrink-0">
+                    <SvgTelephonyNodeIcon className="w-5 h-5" />
                   </div>
                   <div>
                     <div className="text-xs font-semibold text-white group-hover:text-cyan-300 transition-colors">
-                      Inbound & Outbound Calling
+                      Inbound &amp; Outbound Calling
                     </div>
                     <div className="text-[10px] text-slate-400">24/7 Automated resolution</div>
                   </div>
@@ -121,12 +113,12 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({ isOpen, onClose, o
                 className="w-full p-3 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-cyan-500/50 flex items-center justify-between text-left transition-colors cursor-pointer group"
               >
                 <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-lg bg-purple-950 text-purple-400 flex items-center justify-center text-xs">
-                    📅
+                  <div className="w-8 h-8 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-center shrink-0">
+                    <SvgWorkflowCalendarIcon className="w-5 h-5" />
                   </div>
                   <div>
                     <div className="text-xs font-semibold text-white group-hover:text-cyan-300 transition-colors">
-                      Calendar & CRM Sync
+                      Calendar &amp; CRM Sync
                     </div>
                     <div className="text-[10px] text-slate-400">Google, Outlook, Salesforce</div>
                   </div>
@@ -139,12 +131,12 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({ isOpen, onClose, o
                 className="w-full p-3 rounded-xl bg-slate-900/80 border border-slate-800 hover:border-cyan-500/50 flex items-center justify-between text-left transition-colors cursor-pointer group"
               >
                 <div className="flex items-center gap-2.5">
-                  <div className="w-7 h-7 rounded-lg bg-emerald-950 text-emerald-400 flex items-center justify-center text-xs">
-                    📊
+                  <div className="w-8 h-8 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-center shrink-0">
+                    <SvgAnalyticsPulseIcon className="w-5 h-5" />
                   </div>
                   <div>
                     <div className="text-xs font-semibold text-white group-hover:text-cyan-300 transition-colors">
-                      ROI Calculator & Models
+                      ROI Calculator &amp; Models
                     </div>
                     <div className="text-[10px] text-slate-400">Financial payback templates</div>
                   </div>

@@ -1,3 +1,34 @@
+import heroSculptureImg from '../assets/images/voicepod_hero_sculpture_1794944212100.jpg';
+import acousticMicImg from '../assets/images/voicepod_acoustic_mic_1794944212998.jpg';
+import globalRoutingImg from '../assets/images/voicepod_global_routing_1794944214993.jpg';
+import neuralWaveformImg from '../assets/images/voicepod_neural_waveform_1794944214230.jpg';
+import crmWorkspaceImg from '../assets/images/voicepod_crm_workspace_1794944215890.jpg';
+import editorialBoardroomImg from '../assets/images/voicepod_editorial_boardroom_1794944215331.jpg';
+
+import archNeuralEdgeImg from '../assets/images/arch_neural_edge_1794944706915.jpg';
+import pillarHumanVoiceImg from '../assets/images/pillar_human_voice_1794944707185.jpg';
+import pillarAlwaysOnImg from '../assets/images/pillar_always_on_1794944707648.jpg';
+import pillarWorkflowSyncImg from '../assets/images/pillar_workflow_sync_1794944707171.jpg';
+import pillarPersonaAudioImg from '../assets/images/pillar_persona_audio_1794944708404.jpg';
+import solSupportDeskImg from '../assets/images/sol_support_desk_1794944709472.jpg';
+import solSalesSdrImg from '../assets/images/sol_sales_sdr_1794944710107.jpg';
+import solAppointmentCalImg from '../assets/images/sol_appointment_cal_1794944708967.jpg';
+import solOutreachWaveImg from '../assets/images/sol_outreach_wave_1794944710400.jpg';
+import newsletterBriefImg from '../assets/images/newsletter_brief_1794944711285.jpg';
+import featHeaderCoreImg from '../assets/images/feat_header_core_1794944711983.jpg';
+import featSipPipelineImg from '../assets/images/feat_sip_pipeline_1794944711760.jpg';
+import featVoiceCloningImg from '../assets/images/feat_voice_cloning_1794944712124.jpg';
+import featGlobalDialectsImg from '../assets/images/feat_global_dialects_1794944713536.jpg';
+
+import blogIvrEvolutionImg from '../assets/images/blog_ivr_evolution_1794944798720.jpg';
+import blogOmnichannelImg from '../assets/images/blog_omnichannel_messaging_1794944799135.jpg';
+import blogRealEstateImg from '../assets/images/blog_real_estate_lead_1794944800802.jpg';
+import blogEcommerceImg from '../assets/images/blog_ecommerce_support_1794944800633.jpg';
+import pricingEnterpriseRackImg from '../assets/images/pricing_enterprise_rack_1794944804229.jpg';
+import tutorialsAcademyDeskImg from '../assets/images/tutorials_academy_desk_1794944802196.jpg';
+import resFeaturedPlaybookImg from '../assets/images/res_featured_playbook_1794944802736.jpg';
+import faqSupportConsoleImg from '../assets/images/faq_support_console_1794944802858.jpg';
+
 export interface PricingTier {
   id: string;
   name: string;
@@ -53,17 +84,22 @@ export const SITE_METRICS = [
 ];
 
 export const ROBOT_ASSETS = {
-  // Official VoicePod 3D AI Robot avatar from user attachment
-  hero: '/assets/aistudio/image_8e75406e.png',
-  // High-fidelity futuristic 3D humanoid robots & cybernetic artwork
-  architecture: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=900&q=80',
-  support: 'https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=900&q=80',
-  concierge: 'https://images.unsplash.com/photo-1546776310-eef45dd6d63c?auto=format&fit=crop&w=900&q=80',
-  newsletter: '/assets/aistudio/image_8e75406e.png',
-  playbook: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=900&q=80',
-  onboarding: '/assets/aistudio/image_8e75406e.png',
-  avatarFallback: '/assets/aistudio/image_8e75406e.png',
-  bannerFallback: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&w=800&q=80'
+  // Primary generated architectural studio visuals & transparent brand PNG/WebP mark
+  hero: heroSculptureImg,
+  brandMarkPng: '/assets/aistudio/x2dd6rxx_voicepod_icon_transparent__2__8918fc13.webp',
+  architecture: archNeuralEdgeImg,
+  concierge: editorialBoardroomImg,
+  newsletter: newsletterBriefImg,
+  featuresHero: featHeaderCoreImg,
+  featuresSip: featSipPipelineImg,
+  featuresCloning: featVoiceCloningImg,
+  featuresDialects: featGlobalDialectsImg,
+  pricingEnterprise: pricingEnterpriseRackImg,
+  onboarding: tutorialsAcademyDeskImg,
+  playbookFeatured: resFeaturedPlaybookImg,
+  faqSupport: faqSupportConsoleImg,
+  avatarFallback: '/favicon-192x192.png',
+  bannerFallback: '/assets/aistudio/x2dd6rxx_voicepod_icon_transparent__2__8918fc13.webp'
 };
 
 export const CORE_FEATURES = [
@@ -74,7 +110,7 @@ export const CORE_FEATURES = [
     description: 'Never miss an opportunity with AI voice agents that manage both incoming and outgoing calls. Deliver instant responses, engage prospects, follow up on leads, and provide 24/7 call center support.',
     bullets: ['Qualify leads before handoff', 'Run automated outbound campaigns', 'Answer inbound calls 24/7 in zero rings'],
     icon: 'PhoneCall',
-    image: 'https://images.unsplash.com/photo-1589254065878-42c9da997008?auto=format&fit=crop&w=800&q=80'
+    image: crmWorkspaceImg
   },
   {
     id: 'custom-voices',
@@ -83,7 +119,7 @@ export const CORE_FEATURES = [
     description: 'Create a unique voice experience that reflects your brand. Choose from a wide range of realistic AI voices or customize speech inflection, pacing, pitch, and conversational tone.',
     bullets: ['Adjustable tone and speaking style', 'Brand-specific voice selection', 'Natural human-like cadence and breathing'],
     icon: 'Mic',
-    image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80'
+    image: acousticMicImg
   },
   {
     id: 'multiple-accents',
@@ -92,7 +128,7 @@ export const CORE_FEATURES = [
     description: 'Build stronger customer connections with AI voices that speak in familiar regional accents. Deliver conversations that feel natural, trustworthy, and culturally tuned.',
     bullets: ['Better engagement & trust', 'Localized customer experience', 'Regional English, US, UK, and Australian accents'],
     icon: 'Globe',
-    image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80'
+    image: globalRoutingImg
   },
   {
     id: 'multilingual-support',
@@ -101,7 +137,7 @@ export const CORE_FEATURES = [
     description: 'Expand your business globally with AI voice agents that communicate fluently in multiple languages, ensuring every customer feels heard regardless of geography.',
     bullets: ['Natural multilingual conversations', 'Automatic caller language detection', 'Support 50+ international languages'],
     icon: 'Languages',
-    image: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=800&q=80'
+    image: neuralWaveformImg
   }
 ];
 
@@ -110,25 +146,25 @@ export const PILLAR_CAPABILITIES = [
     title: 'Human-Like AI Conversations',
     description: 'Deploy intelligent AI agents that understand customers, answer questions, handle interruptions, and maintain conversations naturally like a real human representative.',
     icon: 'Sparkles',
-    image: 'https://images.unsplash.com/photo-1531746790731-6c087fecd65a?auto=format&fit=crop&w=800&q=80'
+    image: pillarHumanVoiceImg
   },
   {
     title: 'Always Available, Always Responsive',
     description: 'Never miss a customer opportunity with AI agents that answer calls, follow up with leads, and provide support around the clock 24/7/365 without hold music.',
     icon: 'Clock',
-    image: 'https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80'
+    image: pillarAlwaysOnImg
   },
   {
     title: 'Connect Your Existing Workflow',
     description: 'Seamlessly integrate VoicePod with your CRM (Salesforce, HubSpot), calendar (Google/Outlook), WhatsApp, SMS, and Zapier to automate tasks.',
     icon: 'Cpu',
-    image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80'
+    image: pillarWorkflowSyncImg
   },
   {
     title: 'Personalized AI Voice Experience',
     description: 'Choose custom voices, accents, and languages to create AI agents that match your brand identity and connect empathetically with your callers.',
     icon: 'UserCheck',
-    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80'
+    image: pillarPersonaAudioImg
   }
 ];
 
@@ -138,28 +174,28 @@ export const SOLUTIONS_PROJECTS = [
     tag: 'Support & Triage',
     description: 'Provide 24/7 first-call resolution for customer inquiries, billing questions, tracking updates, and account assistance with seamless escalation.',
     metrics: '99.8% Resolution',
-    image: 'https://images.unsplash.com/photo-1534972195531-a756b1126f24?auto=format&fit=crop&w=800&q=80'
+    image: solSupportDeskImg
   },
   {
     title: 'AI Sales Development Assistant',
     tag: 'Outbound & Inbound Sales',
     description: 'Engage web inquiries within 60 seconds, pre-qualify prospects based on BANT criteria, and route high-value leads directly to your sales closers.',
     metrics: '60s Speed-to-Lead',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80'
+    image: solSalesSdrImg
   },
   {
     title: 'Smart AI Appointment Scheduler',
     tag: 'Calendar Automation',
     description: 'Check real-time calendar availability during live phone calls, lock in appointment dates, handle cancellations, and send automated SMS reminders.',
     metrics: 'Zero Double-Booking',
-    image: 'https://images.unsplash.com/photo-1506784365847-bbad939e9335?auto=format&fit=crop&w=800&q=80'
+    image: solAppointmentCalImg
   },
   {
     title: 'AI-Powered Outreach Campaigns',
     tag: 'Proactive Engagement',
     description: 'Conduct compliant outbound notification campaigns, event registration confirmations, renewal reminders, and customer survey callbacks.',
     metrics: '4.8x Reach Rate',
-    image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80'
+    image: solOutreachWaveImg
   }
 ];
 
@@ -355,7 +391,7 @@ export const BLOGS_DATA: BlogPost[] = [
     date: 'March 2026',
     category: 'Customer Experience',
     readTime: '6 min read',
-    image: 'https://images.unsplash.com/photo-1534972195531-a756b1126f24?auto=format&fit=crop&w=700&q=80'
+    image: blogIvrEvolutionImg
   },
   {
     id: 'multichannel-magic',
@@ -364,7 +400,7 @@ export const BLOGS_DATA: BlogPost[] = [
     date: 'March 2026',
     category: 'Omnichannel Strategy',
     readTime: '5 min read',
-    image: 'https://images.unsplash.com/photo-1556742049-0a67e557224f?auto=format&fit=crop&w=700&q=80'
+    image: blogOmnichannelImg
   },
   {
     id: 'real-estate-blueprint',
@@ -373,7 +409,7 @@ export const BLOGS_DATA: BlogPost[] = [
     date: 'February 2026',
     category: 'Real Estate Growth',
     readTime: '4 min read',
-    image: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=700&q=80'
+    image: blogRealEstateImg
   },
   {
     id: 'ecommerce-automation',
@@ -382,7 +418,7 @@ export const BLOGS_DATA: BlogPost[] = [
     date: 'January 2026',
     category: 'E-Commerce Playbook',
     readTime: '7 min read',
-    image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=700&q=80'
+    image: blogEcommerceImg
   }
 ];
 

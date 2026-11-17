@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { ChevronDown, HelpCircle, PhoneCall, ArrowRight, Sparkles, MessageSquare, ShieldCheck } from 'lucide-react';
+import React, { useState, useRef } from 'react';
+import { ChevronDown, PhoneCall, ArrowRight, Sparkles, ShieldCheck } from 'lucide-react';
 import { FAQS_DATA, ROBOT_ASSETS } from '../data/voicepodSiteData';
 import { PageId } from '../components/Navbar';
+import { ScrollReveal } from '../components/ScrollReveal';
 
 interface FaqPageProps {
   onNavigate: (page: PageId) => void;
@@ -9,9 +10,27 @@ interface FaqPageProps {
 
 export const FaqPage: React.FC<FaqPageProps> = ({ onNavigate }) => {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const toggle = (idx: number) => {
     setOpenIndex(openIndex === idx ? null : idx);
+  };
+
+  const handleAccordionKeyDown = (e: React.KeyboardEvent, idx: number) => {
+    const total = FAQS_DATA.length;
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      buttonRefs.current[(idx + 1) % total]?.focus();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      buttonRefs.current[(idx - 1 + total) % total]?.focus();
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      buttonRefs.current[0]?.focus();
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      buttonRefs.current[total - 1]?.focus();
+    }
   };
 
   return (
@@ -37,18 +56,17 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigate }) => {
       <section className="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           
-          {/* Left: 3D Robot Assistant Card */}
-          <div className="lg:col-span-4 rounded-3xl bg-slate-900/80 border border-cyan-500/30 p-6 space-y-6 sticky top-28 shadow-xl shadow-cyan-950/30">
-            <div className="relative w-full h-56 flex items-center justify-center animate-float-robot">
-              <div className="absolute w-[180px] h-[180px] bg-cyan-500/20 rounded-full blur-[50px] animate-pulse-aura" />
+          {/* Left: AI Support Assistant Card */}
+          <ScrollReveal variant="fade-up" className="lg:col-span-4 rounded-3xl bg-slate-900/80 border border-cyan-500/30 p-6 space-y-6 sticky top-28 shadow-xl shadow-cyan-950/30">
+            <div className="relative w-full h-56 rounded-2xl overflow-hidden border border-slate-800 bg-slate-950 flex items-center justify-center">
               <img
-                src={ROBOT_ASSETS.hero}
-                alt="VoicePod Support AI Robot"
+                src={ROBOT_ASSETS.faqSupport}
+                alt="VoicePod AI Support Acoustic Orb"
                 onError={(e) => {
                   e.currentTarget.onerror = null;
                   e.currentTarget.src = ROBOT_ASSETS.avatarFallback;
                 }}
-                className="w-full h-full object-contain filter drop-shadow-[0_15px_30px_rgba(6,182,212,0.45)]"
+                className="w-full h-full object-cover"
               />
             </div>
 
@@ -82,7 +100,7 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigate }) => {
               <span>Talk with Engineering</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
-          </div>
+          </ScrollReveal>
 
           {/* Right: Accordion */}
           <div className="lg:col-span-8 space-y-4">
@@ -90,28 +108,37 @@ export const FaqPage: React.FC<FaqPageProps> = ({ onNavigate }) => {
               const isOpen = openIndex === idx;
 
               return (
-                <div
-                  key={idx}
-                  className="rounded-2xl bg-slate-900/60 border border-slate-800 overflow-hidden transition-all hover:border-slate-700"
-                >
-                  <button
-                    onClick={() => toggle(idx)}
-                    className="w-full p-5 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-slate-900/90 transition-colors"
-                  >
-                    <span className="text-base font-bold text-white">
-                      {item.question}
-                    </span>
-                    <div className={`p-1.5 rounded-lg bg-slate-800 text-cyan-400 shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180 bg-cyan-950 text-cyan-300' : ''}`}>
-                      <ChevronDown className="w-4 h-4" />
-                    </div>
-                  </button>
+                <ScrollReveal key={idx} variant="fade-up" delay={Math.min(idx * 55, 330)}>
+                  <div className="rounded-2xl bg-slate-900/60 border border-slate-800 overflow-hidden transition-all hover:border-slate-700">
+                    <button
+                      ref={(el) => { buttonRefs.current[idx] = el; }}
+                      id={`faq-button-${idx}`}
+                      aria-expanded={isOpen}
+                      aria-controls={`faq-panel-${idx}`}
+                      onClick={() => toggle(idx)}
+                      onKeyDown={(e) => handleAccordionKeyDown(e, idx)}
+                      className="w-full p-5 text-left flex items-center justify-between gap-4 cursor-pointer hover:bg-slate-900/90 transition-colors"
+                    >
+                      <span className="text-base font-bold text-white">
+                        {item.question}
+                      </span>
+                      <div className={`p-1.5 rounded-lg bg-slate-800 text-cyan-400 shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180 bg-cyan-950 text-cyan-300' : ''}`}>
+                        <ChevronDown className="w-4 h-4" />
+                      </div>
+                    </button>
 
-                  {isOpen && (
-                    <div className="px-5 pb-5 text-sm text-slate-300 leading-relaxed border-t border-slate-800/80 pt-4">
-                      {item.answer}
-                    </div>
-                  )}
-                </div>
+                    {isOpen && (
+                      <div
+                        id={`faq-panel-${idx}`}
+                        role="region"
+                        aria-labelledby={`faq-button-${idx}`}
+                        className="px-5 pb-5 text-sm text-slate-300 leading-relaxed border-t border-slate-800/80 pt-4"
+                      >
+                        {item.answer}
+                      </div>
+                    )}
+                  </div>
+                </ScrollReveal>
               );
             })}
           </div>

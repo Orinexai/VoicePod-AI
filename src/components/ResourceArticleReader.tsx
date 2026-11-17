@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Clock, Calendar, Share2, CheckCircle2, Bookmark, Sparkles, Copy, Check, Calculator, ShieldCheck, FileText } from 'lucide-react';
+import { ArrowLeft, Clock, Calendar, Share2, CheckCircle2, Bookmark, Sparkles, Copy, Check, Calculator, ShieldCheck } from 'lucide-react';
 import { ResourceArticle, RESOURCE_ARTICLES } from '../data/resourceArticlesData';
+import { ROBOT_ASSETS } from '../data/voicepodSiteData';
+import { MediaFrame } from './MediaFrame';
+import { ScrollReveal } from './ScrollReveal';
+import { SvgAvatarMonogram } from './ModernSvgVisuals';
 
 interface ResourceArticleReaderProps {
   article: ResourceArticle;
@@ -112,26 +116,24 @@ export const ResourceArticleReader: React.FC<ResourceArticleReaderProps> = ({
 
         {/* Author metadata card */}
         <div className="pt-2 flex items-center gap-3.5">
-          <img
-            src={article.author.avatar}
-            alt={article.author.name}
-            className="w-11 h-11 rounded-full object-cover border-2 border-cyan-500/40 shadow-md shadow-cyan-950"
-          />
+          <SvgAvatarMonogram name={article.author.name} accent="cyan" className="w-11 h-11 shrink-0" />
           <div>
             <div className="text-sm font-bold text-white">{article.author.name}</div>
-            <div className="text-xs text-slate-400 font-light">{article.author.role}</div>
+            <div className="text-xs text-slate-400">{article.author.role}</div>
           </div>
         </div>
       </header>
 
       {/* Hero Banner Visual */}
       <div className="relative rounded-3xl overflow-hidden border border-slate-800 shadow-2xl mb-12 group">
-        <img
+        <MediaFrame
           src={article.heroBanner}
+          fallbackSrc={ROBOT_ASSETS.bannerFallback}
           alt={article.title}
-          className="w-full h-64 sm:h-96 object-cover filter brightness-90 group-hover:scale-102 transition-transform duration-700"
+          className="w-full h-64 sm:h-96"
+          imgClassName="w-full h-full object-cover filter brightness-90 group-hover:scale-105 transition-transform duration-700"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#07090e] via-transparent to-transparent opacity-80" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#07090e] via-transparent to-transparent opacity-80 pointer-events-none" />
       </div>
 
       {/* Key Metrics / Highlights Strip */}
@@ -293,7 +295,7 @@ export const ResourceArticleReader: React.FC<ResourceArticleReaderProps> = ({
       {/* Main Sections */}
       <div className="space-y-12">
         {article.sections.map((section, idx) => (
-          <section key={idx} className="space-y-4">
+          <ScrollReveal as="section" key={idx} variant="fade-up" className="space-y-4">
             <h2 className="text-2xl sm:text-3xl font-bold text-white tracking-tight flex items-center gap-3">
               <span className="w-2 h-6 bg-gradient-to-b from-cyan-400 to-purple-500 rounded-full inline-block" />
               <span>{section.title}</span>
@@ -388,13 +390,13 @@ export const ResourceArticleReader: React.FC<ResourceArticleReaderProps> = ({
                 </pre>
               </div>
             )}
-          </section>
+          </ScrollReveal>
         ))}
       </div>
 
       {/* Key Takeaways Box */}
       {article.keyTakeaways && article.keyTakeaways.length > 0 && (
-        <section className="mt-14 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-purple-950/30 via-slate-900 to-cyan-950/30 border border-purple-500/40 space-y-4 shadow-xl">
+        <ScrollReveal as="section" variant="slide-up" className="mt-14 p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-purple-950/30 via-slate-900 to-cyan-950/30 border border-purple-500/40 space-y-4 shadow-xl">
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-purple-400" />
             <span>Key Strategic Takeaways</span>
@@ -409,12 +411,12 @@ export const ResourceArticleReader: React.FC<ResourceArticleReaderProps> = ({
               </div>
             ))}
           </div>
-        </section>
+        </ScrollReveal>
       )}
 
       {/* Recommended Other Resources */}
       <section className="mt-20 pt-12 border-t border-slate-800 space-y-6">
-        <div className="flex items-center justify-between">
+        <ScrollReveal variant="fade-up" className="flex items-center justify-between">
           <h2 className="text-2xl font-bold text-white">More Resources & Guides</h2>
           <button
             onClick={onBack}
@@ -422,35 +424,36 @@ export const ResourceArticleReader: React.FC<ResourceArticleReaderProps> = ({
           >
             View All Resources →
           </button>
-        </div>
+        </ScrollReveal>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {otherResources.map((item) => (
-            <div
-              key={item.id}
-              onClick={() => {
-                onSelectResource(item.id);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className="rounded-2xl bg-slate-900/80 border border-slate-800 p-5 hover:border-cyan-500/50 transition-all cursor-pointer group flex flex-col justify-between"
-            >
-              <div>
-                <span className="px-2.5 py-1 rounded-full bg-slate-800 text-cyan-300 text-[10px] font-mono border border-slate-700">
-                  {item.tag}
-                </span>
-                <h3 className="text-sm font-bold text-white mt-3 group-hover:text-cyan-300 transition-colors line-clamp-2">
-                  {item.title}
-                </h3>
-                <p className="text-xs text-slate-400 mt-2 line-clamp-2 leading-relaxed">
-                  {item.subtitle}
-                </p>
-              </div>
+          {otherResources.map((item, idx) => (
+            <ScrollReveal key={item.id} variant="slide-up" delay={idx * 85} className="h-full">
+              <div
+                onClick={() => {
+                  onSelectResource(item.id);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="h-full rounded-2xl bg-slate-900/80 border border-slate-800 p-5 hover:border-cyan-500/50 transition-all cursor-pointer group flex flex-col justify-between"
+              >
+                <div>
+                  <span className="px-2.5 py-1 rounded-full bg-slate-800 text-cyan-300 text-[10px] font-mono border border-slate-700">
+                    {item.tag}
+                  </span>
+                  <h3 className="text-sm font-bold text-white mt-3 group-hover:text-cyan-300 transition-colors line-clamp-2">
+                    {item.title}
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-2 line-clamp-2 leading-relaxed">
+                    {item.subtitle}
+                  </p>
+                </div>
 
-              <div className="pt-4 mt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-cyan-400 font-semibold">
-                <span>Read Online Guide</span>
-                <span>→</span>
+                <div className="pt-4 mt-3 border-t border-slate-800/80 flex items-center justify-between text-xs text-cyan-400 font-semibold">
+                  <span>Read Online Guide</span>
+                  <span>→</span>
+                </div>
               </div>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
       </section>

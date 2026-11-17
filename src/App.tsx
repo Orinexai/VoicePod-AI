@@ -1,19 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback, Suspense, lazy } from 'react';
 import { Navbar, PageId } from './components/Navbar';
 import { HomePage } from './pages/HomePage';
-import { FeaturesPage } from './pages/FeaturesPage';
-import { PricingPage } from './pages/PricingPage';
-import { FaqPage } from './pages/FaqPage';
-import { BlogPage } from './pages/BlogPage';
-import { TutorialsPage } from './pages/TutorialsPage';
-import { ResourceCenterPage } from './pages/ResourceCenterPage';
-import { ContactSalesPage } from './pages/ContactSalesPage';
-import { PrivacyPolicyPage } from './pages/PrivacyPolicyPage';
-import { CookiePolicyPage } from './pages/CookiePolicyPage';
 import { Footer } from './components/Footer';
 import { SidebarDrawer } from './components/SidebarDrawer';
 import { CookieBanner } from './components/CookieBanner';
+import { PageSkeleton } from './components/PageSkeleton';
+import { SearchModal } from './components/SearchModal';
 import { ArrowUp } from 'lucide-react';
+
+const FeaturesPage = lazy(() => import('./pages/FeaturesPage').then((m) => ({ default: m.FeaturesPage })));
+const PricingPage = lazy(() => import('./pages/PricingPage').then((m) => ({ default: m.PricingPage })));
+const FaqPage = lazy(() => import('./pages/FaqPage').then((m) => ({ default: m.FaqPage })));
+const BlogPage = lazy(() => import('./pages/BlogPage').then((m) => ({ default: m.BlogPage })));
+const TutorialsPage = lazy(() => import('./pages/TutorialsPage').then((m) => ({ default: m.TutorialsPage })));
+const ResourceCenterPage = lazy(() => import('./pages/ResourceCenterPage').then((m) => ({ default: m.ResourceCenterPage })));
+const ContactSalesPage = lazy(() => import('./pages/ContactSalesPage').then((m) => ({ default: m.ContactSalesPage })));
+const PrivacyPolicyPage = lazy(() => import('./pages/PrivacyPolicyPage').then((m) => ({ default: m.PrivacyPolicyPage })));
+const CookiePolicyPage = lazy(() => import('./pages/CookiePolicyPage').then((m) => ({ default: m.CookiePolicyPage })));
 
 const PAGE_SEO: Record<PageId, { title: string; description: string }> = {
   home: {
@@ -64,6 +67,31 @@ export default function App() {
   const [scrollProgress, setScrollProgress] = useState<number>(0);
   const [showBackToTop, setShowBackToTop] = useState<boolean>(false);
   const [isCookieSettingsOpen, setIsCookieSettingsOpen] = useState<boolean>(false);
+  const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
+  const [pendingBlogId, setPendingBlogId] = useState<string | null>(null);
+  const [pendingTutorialId, setPendingTutorialId] = useState<string | null>(null);
+  const [isPageTransitioning, setIsPageTransitioning] = useState<boolean>(false);
+  const transitionTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (transitionTimerRef.current !== null) {
+        window.clearTimeout(transitionTimerRef.current);
+      }
+    };
+  }, []);
+
+  // Global Cmd+K / Ctrl+K shortcut for real-time site search modal
+  useEffect(() => {
+    const handleGlobalSearchShortcut = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        setIsSearchOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleGlobalSearchShortcut);
+    return () => window.removeEventListener('keydown', handleGlobalSearchShortcut);
+  }, []);
 
   // Track scroll progress for top slim indicator & back-to-top button visibility
   useEffect(() => {
@@ -185,27 +213,65 @@ export default function App() {
       }
     };
 
+    const handlePopOrHash = () => {
+      triggerSkeletonTransition();
+      resolveRoute();
+    };
+
     resolveRoute();
-    window.addEventListener('popstate', resolveRoute);
-    window.addEventListener('hashchange', resolveRoute);
+    window.addEventListener('popstate', handlePopOrHash);
+    window.addEventListener('hashchange', handlePopOrHash);
     return () => {
-      window.removeEventListener('popstate', resolveRoute);
-      window.removeEventListener('hashchange', resolveRoute);
+      window.removeEventListener('popstate', handlePopOrHash);
+      window.removeEventListener('hashchange', handlePopOrHash);
     };
   }, []);
+
+  const triggerSkeletonTransition = () => {
+    if (transitionTimerRef.current !== null) {
+      window.clearTimeout(transitionTimerRef.current);
+    }
+    setIsPageTransitioning(true);
+    transitionTimerRef.current = window.setTimeout(() => {
+      setIsPageTransitioning(false);
+      transitionTimerRef.current = null;
+    }, 200);
+  };
 
   const handleNavigate = (page: PageId) => {
     const targetPath = page === 'home' ? '/' : `/${page}`;
     if (window.location.pathname !== targetPath || window.location.hash) {
       window.history.pushState({ page }, '', targetPath);
     }
+    if (page !== currentPage) {
+      triggerSkeletonTransition();
+    }
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleSelectSearchResult = (page: PageId, itemId?: string) => {
+    if (page === 'blog' && itemId) {
+      setPendingBlogId(itemId);
+    } else if (page === 'tutorials' && itemId) {
+      setPendingTutorialId(itemId);
+    }
+    handleNavigate(page);
+  };
+
+  const consumePendingBlogId = useCallback(() => setPendingBlogId(null), []);
+  const consumePendingTutorialId = useCallback(() => setPendingTutorialId(null), []);
+
   return (
     <div className="min-h-screen bg-[#07090e] text-slate-100 flex flex-col selection:bg-cyan-500/30 selection:text-cyan-200 font-['Sora',sans-serif]">
-      
+      {/* Keyboard Skip to Main Content Link */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-4 focus:py-2.5 focus:rounded-xl focus:bg-cyan-400 focus:text-slate-950 focus:font-bold focus:text-xs focus:shadow-2xl"
+      >
+        Skip to main content
+      </a>
+
       {/* Slim Animated Brand-Cyan Scroll Progress Bar */}
       <div
         className="fixed top-0 left-0 right-0 h-[2.5px] z-[70] bg-slate-900/20 pointer-events-none"
@@ -224,25 +290,51 @@ export default function App() {
         onNavigate={handleNavigate}
       />
 
+      {/* Real-Time Site Search Modal (Cmd+K / Ctrl+K) */}
+      <SearchModal
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+        onSelectResult={handleSelectSearchResult}
+      />
+
       {/* VoicePod Navigation Menu */}
       <Navbar
         currentPage={currentPage}
         onNavigate={handleNavigate}
         onOpenSidebar={() => setSidebarOpen(true)}
+        onOpenSearch={() => setIsSearchOpen(true)}
       />
 
-      {/* Dynamic Page Router */}
-      <main className="flex-grow">
-        {currentPage === 'home' && <HomePage onNavigate={handleNavigate} />}
-        {currentPage === 'features' && <FeaturesPage onNavigate={handleNavigate} />}
-        {currentPage === 'pricing' && <PricingPage onNavigate={handleNavigate} />}
-        {currentPage === 'faq' && <FaqPage onNavigate={handleNavigate} />}
-        {currentPage === 'blog' && <BlogPage />}
-        {currentPage === 'tutorials' && <TutorialsPage />}
-        {currentPage === 'resource-center' && <ResourceCenterPage />}
-        {currentPage === 'contact-sales' && <ContactSalesPage />}
-        {currentPage === 'privacy-policy' && <PrivacyPolicyPage onNavigate={handleNavigate} />}
-        {currentPage === 'cookie-policy' && <CookiePolicyPage onNavigate={handleNavigate} />}
+      {/* Dynamic Page Router with Code-Split Suspense & Skeleton Transitions */}
+      <main id="main-content" tabIndex={-1} className="flex-grow focus:outline-none">
+        {isPageTransitioning ? (
+          <PageSkeleton page={currentPage} />
+        ) : (
+          <Suspense fallback={<PageSkeleton page={currentPage} />}>
+            <div key={currentPage} className="animate-page-enter">
+              {currentPage === 'home' && <HomePage onNavigate={handleNavigate} />}
+              {currentPage === 'features' && <FeaturesPage onNavigate={handleNavigate} />}
+              {currentPage === 'pricing' && <PricingPage onNavigate={handleNavigate} />}
+              {currentPage === 'faq' && <FaqPage onNavigate={handleNavigate} />}
+              {currentPage === 'blog' && (
+                <BlogPage
+                  initialArticleId={pendingBlogId}
+                  onConsumeInitialArticle={consumePendingBlogId}
+                />
+              )}
+              {currentPage === 'tutorials' && (
+                <TutorialsPage
+                  initialTutorialId={pendingTutorialId}
+                  onConsumeInitialTutorial={consumePendingTutorialId}
+                />
+              )}
+              {currentPage === 'resource-center' && <ResourceCenterPage />}
+              {currentPage === 'contact-sales' && <ContactSalesPage />}
+              {currentPage === 'privacy-policy' && <PrivacyPolicyPage onNavigate={handleNavigate} />}
+              {currentPage === 'cookie-policy' && <CookiePolicyPage onNavigate={handleNavigate} />}
+            </div>
+          </Suspense>
+        )}
       </main>
 
       {/* Cookie Consent Banner */}

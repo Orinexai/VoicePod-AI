@@ -2,6 +2,7 @@ import React from 'react';
 import { Mail, MapPin, Globe, ShieldCheck, Facebook, Instagram, Youtube } from 'lucide-react';
 import { OFFICE_INFO } from '../data/voicepodSiteData';
 import { PageId } from './Navbar';
+import { ScrollReveal } from './ScrollReveal';
 
 interface FooterProps {
   onNavigate: (page: PageId) => void;
@@ -16,7 +17,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenCookieSettings
 
   return (
     <footer className="bg-[#05070f] border-t border-slate-800/80 pt-16 pb-12 text-slate-400 text-xs font-['Sora',sans-serif]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <ScrollReveal variant="fade-up" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Main Columns Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-800/80">
@@ -232,7 +233,7 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenCookieSettings
           </div>
         </div>
 
-      </div>
+      </ScrollReveal>
     </footer>
   );
 };

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Shield, Lock, FileText, Mail, Building2, CheckCircle2, ArrowLeft } from 'lucide-react';
 import { PageId } from '../components/Navbar';
+import { ScrollReveal } from '../components/ScrollReveal';
 
 interface PrivacyPolicyPageProps {
   onNavigate: (page: PageId) => void;
@@ -40,7 +41,7 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12 text-slate-300 text-sm leading-relaxed font-light">
         
         {/* Company Registration Notice */}
-        <div className="p-6 rounded-2xl bg-slate-900/90 border border-cyan-500/30 space-y-3">
+        <ScrollReveal variant="fade-up" className="p-6 rounded-2xl bg-slate-900/90 border border-cyan-500/30 space-y-3">
           <div className="flex items-center gap-2 text-white font-bold text-base">
             <Building2 className="w-5 h-5 text-cyan-400" />
             <span>1. Data Controller Information</span>
@@ -54,10 +55,10 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
               support@voicepod.ai
             </a>.
           </p>
-        </div>
+        </ScrollReveal>
 
         {/* Section 2 */}
-        <section className="space-y-4">
+        <ScrollReveal as="section" variant="fade-up" className="space-y-4">
           <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2.5">
             <span className="w-2 h-5 bg-cyan-400 rounded-full" />
             <span>2. Scope & Overview</span>
@@ -65,10 +66,10 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
           <p>
             We take data protection seriously. This Privacy Policy outlines how Tech Future Solutions Ltd collects, processes, stores, and protects personal data when you visit our website (voicepod.ai), evaluate our AI voice solutions, communicate with our sales and support teams, or subscribe to our software services.
           </p>
-        </section>
+        </ScrollReveal>
 
         {/* Section 3 */}
-        <section className="space-y-4">
+        <ScrollReveal as="section" variant="fade-up" className="space-y-4">
           <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2.5">
             <span className="w-2 h-5 bg-cyan-400 rounded-full" />
             <span>3. Information We Collect</span>
@@ -85,10 +86,10 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
               <strong className="text-white">Technical & Usage Data:</strong> IP address, browser type, device information, operating system, pages viewed, and session timestamps collected via essential and analytics cookies.
             </li>
           </ul>
-        </section>
+        </ScrollReveal>
 
         {/* Section 4 */}
-        <section className="space-y-4">
+        <ScrollReveal as="section" variant="fade-up" className="space-y-4">
           <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2.5">
             <span className="w-2 h-5 bg-cyan-400 rounded-full" />
             <span>4. Legal Basis for Processing (UK GDPR / DPA 2018)</span>
@@ -112,10 +113,10 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
               <p className="text-xs text-slate-400">To comply with statutory accounting, taxation, and regulatory requirements in the United Kingdom.</p>
             </div>
           </div>
-        </section>
+        </ScrollReveal>
 
         {/* Section 5 */}
-        <section className="space-y-4">
+        <ScrollReveal as="section" variant="fade-up" className="space-y-4">
           <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2.5">
             <span className="w-2 h-5 bg-cyan-400 rounded-full" />
             <span>5. Security & Data Protection Measures</span>
@@ -130,10 +131,10 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
           <p>
             We enforce strict access control policies, encrypted communications, regular operational reviews, and role-based permissions across our engineering and customer infrastructure.
           </p>
-        </section>
+        </ScrollReveal>
 
         {/* Section 6 */}
-        <section className="space-y-4">
+        <ScrollReveal as="section" variant="fade-up" className="space-y-4">
           <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2.5">
             <span className="w-2 h-5 bg-cyan-400 rounded-full" />
             <span>6. Your Rights</span>
@@ -148,10 +149,10 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
             </a>
             . We respond to all verified statutory requests within 30 calendar days.
           </p>
-        </section>
+        </ScrollReveal>
 
         {/* Section 7 */}
-        <section className="space-y-4">
+        <ScrollReveal as="section" variant="fade-up" className="space-y-4">
           <h2 className="text-xl font-bold text-white tracking-tight flex items-center gap-2.5">
             <span className="w-2 h-5 bg-cyan-400 rounded-full" />
             <span>7. Updates to This Policy</span>
@@ -159,7 +160,7 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
           <p>
             We may periodically revise this Privacy Policy to reflect modifications to our telephony platforms or regulatory obligations. The revised version will be indicated by an updated "Effective Date" at the top of this document.
           </p>
-        </section>
+        </ScrollReveal>
 
       </div>
     </div>

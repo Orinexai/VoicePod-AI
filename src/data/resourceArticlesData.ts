@@ -1,3 +1,11 @@
+import { ROBOT_ASSETS } from './voicepodSiteData';
+import resArtPlaybookImg from '../assets/images/res_art_playbook_1794944803557.jpg';
+import resArtRoiImg from '../assets/images/res_art_roi_1794944803629.jpg';
+import resArtRealEstateImg from '../assets/images/res_art_realestate_1794944804546.jpg';
+import resArtSaasImg from '../assets/images/res_art_saas_1794944804752.jpg';
+import resArtReportImg from '../assets/images/res_art_report_1794944805533.jpg';
+import resArtApiImg from '../assets/images/res_art_api_1794944806914.jpg';
+
 export interface ResourceArticleSection {
   title: string;
   content: string;
@@ -45,9 +53,9 @@ export const RESOURCE_ARTICLES: Record<string, ResourceArticle> = {
     author: {
       name: 'Dr. Aaron Vance',
       role: 'Head of Voice AI Architecture, VOICEPOD',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80'
+      avatar: ROBOT_ASSETS.avatarFallback
     },
-    heroBanner: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80',
+    heroBanner: resArtPlaybookImg,
     stats: [
       { label: 'Transition Timeline', value: '14 Days', detail: 'Zero downtime rollout' },
       { label: 'First Contact Resolution', value: '89.4%', detail: 'Autonomous inquiry close' },
@@ -133,9 +141,9 @@ export const RESOURCE_ARTICLES: Record<string, ResourceArticle> = {
     author: {
       name: 'Elena Rostova',
       role: 'Director of Growth & Financial Operations, VOICEPOD',
-      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80'
+      avatar: ROBOT_ASSETS.avatarFallback
     },
-    heroBanner: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80',
+    heroBanner: resArtRoiImg,
     stats: [
       { label: 'Average ROI', value: '412%', detail: 'Within first 90 days' },
       { label: 'Cost Per Resolved Call', value: '$0.49', detail: 'vs. $6.50 human avg' },
@@ -196,9 +204,9 @@ export const RESOURCE_ARTICLES: Record<string, ResourceArticle> = {
     author: {
       name: 'Victoria Vance',
       role: 'Head of Enterprise Real Estate Solutions',
-      avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80'
+      avatar: ROBOT_ASSETS.avatarFallback
     },
-    heroBanner: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&w=1200&q=80',
+    heroBanner: resArtRealEstateImg,
     stats: [
       { label: 'Speed to Lead', value: '38 sec', detail: 'Sub-60s outbound dial' },
       { label: 'Listing Showings', value: '+400%', detail: 'Confirmed appointments' },
@@ -262,9 +270,9 @@ export const RESOURCE_ARTICLES: Record<string, ResourceArticle> = {
     author: {
       name: 'Marcus Sterling',
       role: 'VP Revenue Operations',
-      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80'
+      avatar: ROBOT_ASSETS.avatarFallback
     },
-    heroBanner: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1200&q=80',
+    heroBanner: resArtSaasImg,
     stats: [
       { label: 'Demo Bookings', value: '+250%', detail: 'In first 45 days' },
       { label: 'Speed to Lead', value: '48 sec', detail: 'From form submission' },
@@ -309,9 +317,9 @@ export const RESOURCE_ARTICLES: Record<string, ResourceArticle> = {
     author: {
       name: 'Dr. Sophia Chen',
       role: 'Principal Telephony & AI Scientist',
-      avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=200&q=80'
+      avatar: ROBOT_ASSETS.avatarFallback
     },
-    heroBanner: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=80',
+    heroBanner: resArtReportImg,
     stats: [
       { label: 'Conversational Latency', value: '< 300ms', detail: 'Human perceptual threshold' },
       { label: 'Global Market Size', value: '$34.8B', detail: 'By 2028 projected CAGR' },
@@ -355,9 +363,9 @@ export const RESOURCE_ARTICLES: Record<string, ResourceArticle> = {
     author: {
       name: 'Tariq Al-Mansoor',
       role: 'Staff Solutions Engineer',
-      avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=200&q=80'
+      avatar: ROBOT_ASSETS.avatarFallback
     },
-    heroBanner: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1200&q=80',
+    heroBanner: resArtApiImg,
     stats: [
       { label: 'Webhook SLA', value: '< 150ms', detail: 'Event emission speed' },
       { label: 'Supported CRMs', value: '25+', detail: 'Native & Zapier connects' },
