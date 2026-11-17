@@ -3,14 +3,42 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/webp" href="/assets/aistudio/x2dd6rxx_voicepod_icon_transparent__2__8918fc13.webp" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192x192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <title>VOICEPOD | Autonomous AI Voice Assistants for Business</title>
     <meta name="description" content="Customize 24/7 AI Voice Assistants that handle inbound calls, run outbound campaigns, qualify leads, and schedule appointments with sub-300ms latency." />
+    <link rel="canonical" href="https://voicepod.ai/" />
+    <meta property="og:site_name" content="VOICEPOD" />
+    <meta property="og:url" content="https://voicepod.ai/" />
     <meta property="og:title" content="VOICEPOD | Autonomous AI Voice Assistants for Business" />
     <meta property="og:description" content="Customize 24/7 AI Voice Assistants that handle inbound calls, run outbound campaigns, qualify leads, and schedule appointments with sub-300ms latency." />
-    <meta property="og:image" content="/assets/aistudio/x2dd6rxx_voicepod_icon_transparent__2__8918fc13.webp" />
+    <meta property="og:image" content="https://voicepod.ai/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="VOICEPOD | Autonomous AI Voice Assistants for Business" />
+    <meta name="twitter:description" content="Customize 24/7 AI Voice Assistants that handle inbound calls, run outbound campaigns, qualify leads, and schedule appointments with sub-300ms latency." />
+    <meta name="twitter:image" content="https://voicepod.ai/og-image.png" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "VOICEPOD",
+        "applicationCategory": "BusinessApplication",
+        "operatingSystem": "Web",
+        "url": "https://voicepod.ai/",
+        "description": "Autonomous 24/7 AI Voice Assistants that handle inbound calls, run outbound campaigns, qualify leads, and schedule appointments.",
+        "provider": {
+          "@type": "Organization",
+          "name": "Tech Future Solutions Ltd",
+          "url": "https://voicepod.ai/",
+          "email": "support@voicepod.ai"
+        }
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -18,6 +46,10 @@
   <body class="bg-[#07090e] text-slate-100 antialiased selection:bg-cyan-500/30 selection:text-cyan-200 min-h-screen font-sans">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script type="module">
+      import Typebot from 'https://cdn.jsdelivr.net/npm/@typebot.io/js@0.3/dist/web.js'
+      Typebot.initBubble({ typebot: "voicepod-ai", apiHost: "https://typebot.co", theme: { button: { backgroundColor: "#683BF2" } } });
+    </script>
   </body>
 </html>
 

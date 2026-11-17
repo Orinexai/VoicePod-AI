@@ -13,7 +13,7 @@ import { CookiePolicyPage } from './pages/CookiePolicyPage';
 import { Footer } from './components/Footer';
 import { SidebarDrawer } from './components/SidebarDrawer';
 import { CookieBanner } from './components/CookieBanner';
-import { PhoneCall, ArrowUp } from 'lucide-react';
+import { ArrowUp } from 'lucide-react';
 
 const PAGE_SEO: Record<PageId, { title: string; description: string }> = {
   home: {
@@ -63,6 +63,7 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
   const [scrollProgress, setScrollProgress] = useState<number>(0);
   const [showBackToTop, setShowBackToTop] = useState<boolean>(false);
+  const [isCookieSettingsOpen, setIsCookieSettingsOpen] = useState<boolean>(false);
 
   // Track scroll progress for top slim indicator & back-to-top button visibility
   useEffect(() => {
@@ -82,32 +83,51 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [currentPage]);
 
-  // Dynamic SEO metadata updates per page (Yoast / RankMath equivalent)
+  // Dynamic SEO metadata updates per page (canonical, OpenGraph, Twitter)
   useEffect(() => {
     const seo = PAGE_SEO[currentPage] || PAGE_SEO.home;
+    const cleanPath = currentPage === 'home' ? '/' : `/${currentPage}`;
+    const canonicalUrl = `${window.location.origin}${cleanPath}`;
+
     document.title = seo.title;
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) {
-      metaDesc.setAttribute('content', seo.description);
-    }
-    const ogTitle = document.querySelector('meta[property="og:title"]');
-    if (ogTitle) {
-      ogTitle.setAttribute('content', seo.title);
-    }
-    const ogDesc = document.querySelector('meta[property="og:description"]');
-    if (ogDesc) {
-      ogDesc.setAttribute('content', seo.description);
-    }
+
+    const setMeta = (selector: string, attr: string, value: string) => {
+      const el = document.querySelector(selector);
+      if (el) el.setAttribute(attr, value);
+    };
+
+    setMeta('meta[name="description"]', 'content', seo.description);
+    setMeta('meta[property="og:title"]', 'content', seo.title);
+    setMeta('meta[property="og:description"]', 'content', seo.description);
+    setMeta('meta[property="og:url"]', 'content', canonicalUrl);
+    setMeta('meta[name="twitter:title"]', 'content', seo.title);
+    setMeta('meta[name="twitter:description"]', 'content', seo.description);
+    setMeta('link[rel="canonical"]', 'href', canonicalUrl);
   }, [currentPage]);
 
-  // Handle URL hash on initial load & hash changes
+  // Handle clean pathname routing (e.g. /pricing instead of /#pricing) + legacy hash redirects
   useEffect(() => {
-    const handleHashChange = () => {
+    const validPages: PageId[] = [
+      'home',
+      'features',
+      'pricing',
+      'faq',
+      'blog',
+      'tutorials',
+      'resource-center',
+      'contact-sales',
+      'privacy-policy',
+      'cookie-policy'
+    ];
+
+    const resolveRoute = () => {
+      const rawPath = window.location.pathname.toLowerCase().replace(/\/+$/, '');
       const rawHash = window.location.hash.toLowerCase();
+      const combined = `${rawPath} ${rawHash}`;
 
       // Security measure: disable and redirect any author archive or user enumeration URLs
-      if (rawHash.includes('author') || rawHash.includes('hamdan') || rawHash.includes('user')) {
-        window.location.hash = 'blog';
+      if (combined.includes('author') || combined.includes('hamdan') || combined.includes('user')) {
+        window.history.replaceState({ page: 'blog' }, '', '/blog');
         setCurrentPage('blog');
         return;
       }
@@ -131,48 +151,55 @@ export default function App() {
         'footer-2-2',
         'about-us'
       ];
-      if (legacyDemoPages.some((demo) => rawHash.includes(demo))) {
-        if (rawHash.includes('blog')) {
-          window.location.hash = 'blog';
+      if (legacyDemoPages.some((demo) => combined.includes(demo))) {
+        if (combined.includes('blog')) {
+          window.history.replaceState({ page: 'blog' }, '', '/blog');
           setCurrentPage('blog');
-        } else if (rawHash.includes('service') || rawHash.includes('project') || rawHash.includes('about')) {
-          window.location.hash = 'features';
+        } else if (combined.includes('service') || combined.includes('project') || combined.includes('about')) {
+          window.history.replaceState({ page: 'features' }, '', '/features');
           setCurrentPage('features');
         } else {
-          window.location.hash = '';
+          window.history.replaceState({ page: 'home' }, '', '/');
           setCurrentPage('home');
         }
         return;
       }
 
-      const hash = window.location.hash.replace('#', '').replace('/', '') as PageId;
-      const validPages: PageId[] = [
-        'home',
-        'features',
-        'pricing',
-        'faq',
-        'blog',
-        'tutorials',
-        'resource-center',
-        'contact-sales',
-        'privacy-policy',
-        'cookie-policy'
-      ];
-      if (validPages.includes(hash)) {
-        setCurrentPage(hash);
-      } else if (!hash) {
+      // Backwards compatibility: normalize legacy /#pricing hash URLs to /pricing
+      if (rawHash) {
+        const cleanHash = rawHash.replace(/^#\/?/, '').replace(/\/+$/, '') as PageId;
+        if (validPages.includes(cleanHash)) {
+          const targetPath = cleanHash === 'home' ? '/' : `/${cleanHash}`;
+          window.history.replaceState({ page: cleanHash }, '', targetPath);
+          setCurrentPage(cleanHash);
+          return;
+        }
+      }
+
+      const pathSlug = (rawPath.replace(/^\//, '') || 'home') as PageId;
+      if (validPages.includes(pathSlug)) {
+        setCurrentPage(pathSlug);
+      } else {
+        window.history.replaceState({ page: 'home' }, '', '/');
         setCurrentPage('home');
       }
     };
 
-    handleHashChange();
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    resolveRoute();
+    window.addEventListener('popstate', resolveRoute);
+    window.addEventListener('hashchange', resolveRoute);
+    return () => {
+      window.removeEventListener('popstate', resolveRoute);
+      window.removeEventListener('hashchange', resolveRoute);
+    };
   }, []);
 
   const handleNavigate = (page: PageId) => {
+    const targetPath = page === 'home' ? '/' : `/${page}`;
+    if (window.location.pathname !== targetPath || window.location.hash) {
+      window.history.pushState({ page }, '', targetPath);
+    }
     setCurrentPage(page);
-    window.location.hash = page === 'home' ? '' : page;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -219,11 +246,14 @@ export default function App() {
       </main>
 
       {/* Cookie Consent Banner */}
-      <CookieBanner onNavigate={handleNavigate} />
+      <CookieBanner
+        onNavigate={handleNavigate}
+        forceOpen={isCookieSettingsOpen}
+        onClose={() => setIsCookieSettingsOpen(false)}
+      />
 
-      {/* Floating Action Controls: Back to Top & Contact Sales */}
-      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end gap-3 pointer-events-none">
-        {/* Floating Back to Top Button */}
+      {/* Floating Back to Top Control (offset above Typebot chat bubble) */}
+      <div className="fixed bottom-24 right-6 z-40 pointer-events-none">
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           className={`group w-11 h-11 rounded-2xl bg-slate-900/90 hover:bg-cyan-950/80 border border-cyan-500/30 hover:border-cyan-400 text-cyan-400 hover:text-cyan-200 backdrop-blur-md shadow-xl shadow-cyan-950/50 flex items-center justify-center transition-all duration-300 transform active:scale-90 pointer-events-auto cursor-pointer ${
@@ -236,19 +266,13 @@ export default function App() {
         >
           <ArrowUp className="w-5 h-5 transition-transform duration-200 group-hover:-translate-y-0.5" />
         </button>
-
-        {/* Contact Sales Action */}
-        <button
-          onClick={() => handleNavigate('contact-sales')}
-          className="px-4 py-3 rounded-full bg-gradient-to-r from-cyan-400 to-teal-300 hover:from-cyan-300 text-slate-950 font-extrabold text-xs shadow-2xl shadow-cyan-500/40 flex items-center gap-2.5 transition-all duration-300 hover:scale-105 active:scale-95 border border-cyan-200 cursor-pointer pointer-events-auto"
-        >
-          <PhoneCall className="w-4 h-4" />
-          <span>Contact Sales</span>
-        </button>
       </div>
 
       {/* Exact VoicePod Footer */}
-      <Footer onNavigate={handleNavigate} />
+      <Footer
+        onNavigate={handleNavigate}
+        onOpenCookieSettings={() => setIsCookieSettingsOpen(true)}
+      />
 
     </div>
   );

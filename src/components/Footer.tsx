@@ -1,13 +1,14 @@
 import React from 'react';
-import { Mail, MapPin, Globe, ShieldCheck, ArrowRight, Linkedin, Youtube, Twitter } from 'lucide-react';
+import { Mail, MapPin, Globe, ShieldCheck, Facebook, Instagram, Youtube } from 'lucide-react';
 import { OFFICE_INFO } from '../data/voicepodSiteData';
 import { PageId } from './Navbar';
 
 interface FooterProps {
   onNavigate: (page: PageId) => void;
+  onOpenCookieSettings?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
+export const Footer: React.FC<FooterProps> = ({ onNavigate, onOpenCookieSettings }) => {
   const handleNav = (page: PageId) => {
     onNavigate(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -54,34 +55,45 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
             </div>
 
             {/* Verified Social Links in Footer */}
-            <div className="pt-3 flex items-center gap-3">
+            <div className="pt-3 flex items-center gap-2.5">
               <span className="text-[11px] font-mono text-slate-500">Follow:</span>
               <a
-                href="https://www.linkedin.com"
+                href="https://www.facebook.com/p/VoicePod-AI-61582448673384/"
                 target="_blank"
-                rel="noreferrer"
-                aria-label="LinkedIn"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
                 className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-500/50 hover:text-cyan-400 text-slate-400 flex items-center justify-center transition-colors cursor-pointer"
               >
-                <Linkedin className="w-3.5 h-3.5" />
+                <Facebook className="w-3.5 h-3.5" />
               </a>
               <a
-                href="https://www.youtube.com"
+                href="https://www.instagram.com/voicepodai/"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 hover:border-pink-500/50 hover:text-pink-400 text-slate-400 flex items-center justify-center transition-colors cursor-pointer"
+              >
+                <Instagram className="w-3.5 h-3.5" />
+              </a>
+              <a
+                href="https://www.tiktok.com/@kingsleyujam"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="TikTok"
+                className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-500/50 hover:text-cyan-400 text-slate-400 flex items-center justify-center transition-colors cursor-pointer"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5" aria-hidden="true">
+                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z" />
+                </svg>
+              </a>
+              <a
+                href="https://www.youtube.com/@VoicePodAI"
+                target="_blank"
+                rel="noopener noreferrer"
                 aria-label="YouTube"
                 className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 hover:border-red-500/50 hover:text-red-400 text-slate-400 flex items-center justify-center transition-colors cursor-pointer"
               >
                 <Youtube className="w-3.5 h-3.5" />
-              </a>
-              <a
-                href="https://x.com"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Twitter / X"
-                className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-500/50 hover:text-cyan-400 text-slate-400 flex items-center justify-center transition-colors cursor-pointer"
-              >
-                <Twitter className="w-3.5 h-3.5" />
               </a>
             </div>
           </div>
@@ -154,10 +166,15 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
           <div className="space-y-3">
             <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-white">Office Address</h4>
             <div className="space-y-2 text-slate-300">
-              <div className="flex items-start gap-2">
-                <MapPin className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5" />
-                <span>{OFFICE_INFO.name}, {OFFICE_INFO.address}</span>
-              </div>
+              <a
+                href={OFFICE_INFO.mapUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-start gap-2 hover:text-cyan-400 transition-colors cursor-pointer group"
+              >
+                <MapPin className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
+                <span className="group-hover:underline">{OFFICE_INFO.name}, {OFFICE_INFO.address}</span>
+              </a>
               <div className="pt-2">
                 <div className="text-[10px] font-mono text-slate-500 uppercase">Email Address:</div>
                 <div className="flex items-center gap-2 mt-1">
@@ -201,10 +218,10 @@ export const Footer: React.FC<FooterProps> = ({ onNavigate }) => {
               Cookie Policy
             </button>
             <button
-              onClick={() => handleNav('resource-center')}
-              className="hover:text-slate-400 cursor-pointer"
+              onClick={() => onOpenCookieSettings?.()}
+              className="hover:text-cyan-400 transition-colors cursor-pointer"
             >
-              Terms of Service
+              Cookie settings
             </button>
             <button
               onClick={() => handleNav('contact-sales')}

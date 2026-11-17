@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Check, ArrowRight, ShieldCheck, Zap, Sparkles, CheckCircle2, X, PhoneCall, User, Mail, Building } from 'lucide-react';
+import { Check, ArrowRight, ShieldCheck, Zap, Sparkles, CheckCircle2, X, PhoneCall, User, Mail, Building, Loader2, AlertCircle } from 'lucide-react';
 import { PRICING_DATA, PricingTier, ROBOT_ASSETS } from '../data/voicepodSiteData';
 import { PageId } from '../components/Navbar';
+import { submitToWebhook } from '../utils/webhook';
 
 interface PricingPageProps {
   onNavigate: (page: PageId) => void;
@@ -16,6 +17,8 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
     company: ''
   });
   const [trialSuccess, setTrialSuccess] = useState(false);
+  const [isSubmittingTrial, setIsSubmittingTrial] = useState(false);
+  const [trialError, setTrialError] = useState<string | null>(null);
 
   const handlePlanCta = (tier: PricingTier) => {
     if (tier.id === 'enterprise') {
@@ -24,17 +27,39 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
     } else {
       setSelectedPlanForTrial(tier);
       setTrialSuccess(false);
+      setTrialError(null);
     }
   };
 
-  const handleTrialSubmit = (e: React.FormEvent) => {
+  const handleTrialSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setTrialSuccess(true);
+    if (!selectedPlanForTrial || isSubmittingTrial) return;
+
+    setIsSubmittingTrial(true);
+    setTrialError(null);
+
+    try {
+      await submitToWebhook({
+        path: 'trial',
+        name: trialFormData.fullName.trim(),
+        email: trialFormData.email.trim(),
+        company: trialFormData.company.trim(),
+        phone: trialFormData.phone.trim(),
+        message: `14-day free trial request for ${selectedPlanForTrial.name} plan (${selectedPlanForTrial.price}${selectedPlanForTrial.period})`,
+        plan: selectedPlanForTrial.name,
+      });
+      setTrialSuccess(true);
+    } catch {
+      setTrialError('Unable to submit your trial request right now. Please try again or email support@voicepod.ai.');
+    } finally {
+      setIsSubmittingTrial(false);
+    }
   };
 
   const handleCloseTrialModal = () => {
     setSelectedPlanForTrial(null);
     setTrialSuccess(false);
+    setTrialError(null);
     setTrialFormData({ fullName: '', email: '', phone: '', company: '' });
   };
 
@@ -198,7 +223,7 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
                     Start Your 14-Day Free Trial
                   </h3>
                   <p className="text-xs text-slate-300 font-light">
-                    Instant setup for <span className="text-cyan-400 font-semibold">{selectedPlanForTrial.name}</span> ({selectedPlanForTrial.price}{selectedPlanForTrial.period}). No credit card required to start.
+                    Request a 14-day free trial for <span className="text-cyan-400 font-semibold">{selectedPlanForTrial.name}</span> ({selectedPlanForTrial.price}{selectedPlanForTrial.period}).
                   </p>
                 </div>
 
@@ -237,7 +262,7 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
                     <div className="space-y-1">
                       <label className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
                         <PhoneCall className="w-3.5 h-3.5 text-teal-400" />
-                        <span>Phone (For AI Test Call) *</span>
+                        <span>Phone Number *</span>
                       </label>
                       <input
                         type="tel"
@@ -268,17 +293,33 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
 
                 <div className="p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 text-[11px] text-slate-400 space-y-1">
                   <div className="text-white font-semibold">What happens next?</div>
-                  <div>✓ Instant dashboard access & API keys</div>
-                  <div>✓ Receive your first inbound test call within 2 minutes</div>
+                  <div>✓ Our team will contact you within 1 working day to set up your trial</div>
                   <div>✓ Full access to {selectedPlanForTrial.agents} & {selectedPlanForTrial.minutes}</div>
                 </div>
 
+                {trialError && (
+                  <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-300 text-xs flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
+                    <span>{trialError}</span>
+                  </div>
+                )}
+
                 <button
                   type="submit"
-                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-cyan-400 via-teal-300 to-cyan-400 hover:from-cyan-300 text-slate-950 font-bold text-xs sm:text-sm shadow-xl shadow-cyan-950 transition-all cursor-pointer flex items-center justify-center gap-2"
+                  disabled={isSubmittingTrial}
+                  className="w-full py-3.5 rounded-xl bg-gradient-to-r from-cyan-400 via-teal-300 to-cyan-400 hover:from-cyan-300 disabled:opacity-60 disabled:cursor-not-allowed text-slate-950 font-bold text-xs sm:text-sm shadow-xl shadow-cyan-950 transition-all cursor-pointer flex items-center justify-center gap-2"
                 >
-                  <span>Activate Free 14-Day Trial</span>
-                  <ArrowRight className="w-4 h-4" />
+                  {isSubmittingTrial ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Submitting Request...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Request 14-Day Free Trial</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
                 </button>
               </form>
             ) : (
@@ -286,9 +327,9 @@ export const PricingPage: React.FC<PricingPageProps> = ({ onNavigate }) => {
                 <div className="w-16 h-16 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto">
                   <CheckCircle2 className="w-9 h-9" />
                 </div>
-                <h3 className="text-2xl font-bold text-white">Trial Account Activated!</h3>
+                <h3 className="text-2xl font-bold text-white">Trial Request Received</h3>
                 <p className="text-xs sm:text-sm text-slate-300 max-w-sm mx-auto leading-relaxed font-light">
-                  Welcome aboard, <span className="text-cyan-400 font-semibold">{trialFormData.fullName}</span>! Your 14-day free trial on the <strong className="text-white">{selectedPlanForTrial.name}</strong> has been provisioned. Login instructions have been sent to <span className="text-white font-mono">{trialFormData.email}</span>.
+                  Thanks – our team will be in touch within 1 working day to set up your trial
                 </p>
                 <div className="pt-2">
                   <button

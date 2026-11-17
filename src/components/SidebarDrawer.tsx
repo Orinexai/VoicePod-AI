@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { X, ArrowRight, PhoneCall, Mail, MapPin, Globe, Shield, Sparkles, Linkedin, Youtube } from 'lucide-react';
+import { X, ArrowRight, PhoneCall, Mail, MapPin, Sparkles, Facebook, Instagram, Youtube } from 'lucide-react';
 import { PageId } from './Navbar';
 import { OFFICE_INFO } from '../data/voicepodSiteData';
 
@@ -159,10 +159,15 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({ isOpen, onClose, o
             <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400 pt-2">
               Registered Office
             </h3>
-            <div className="flex items-start gap-2 text-slate-300">
+            <a
+              href={OFFICE_INFO.mapUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-start gap-2 text-slate-300 hover:text-cyan-400 transition-colors group"
+            >
               <MapPin className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
-              <span>{OFFICE_INFO.name}, {OFFICE_INFO.address}</span>
-            </div>
+              <span className="group-hover:underline">{OFFICE_INFO.name}, {OFFICE_INFO.address}</span>
+            </a>
             <div className="flex items-center gap-2 text-slate-300 pt-1">
               <Mail className="w-4 h-4 text-purple-400 shrink-0" />
               <a href={`mailto:${OFFICE_INFO.email}`} className="text-cyan-400 hover:underline font-mono">
@@ -177,31 +182,44 @@ export const SidebarDrawer: React.FC<SidebarDrawerProps> = ({ isOpen, onClose, o
         <div className="pt-6 border-t border-slate-800/80 space-y-4">
           <div className="flex items-center justify-between">
             <span className="text-xs font-mono text-slate-400">Connect With Us:</span>
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2">
               <a
-                href="https://www.linkedin.com"
+                href="https://www.facebook.com/p/VoicePod-AI-61582448673384/"
                 target="_blank"
-                rel="noreferrer"
-                aria-label="LinkedIn"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
                 className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-500/50 hover:text-cyan-400 text-slate-400 flex items-center justify-center transition-colors cursor-pointer"
               >
-                <Linkedin className="w-3.5 h-3.5" />
+                <Facebook className="w-3.5 h-3.5" />
               </a>
               <a
-                href="https://youtube.com"
+                href="https://www.instagram.com/voicepodai/"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 hover:border-pink-500/50 hover:text-pink-400 text-slate-400 flex items-center justify-center transition-colors cursor-pointer"
+              >
+                <Instagram className="w-3.5 h-3.5" />
+              </a>
+              <a
+                href="https://www.tiktok.com/@kingsleyujam"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="TikTok"
+                className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 hover:border-cyan-500/50 hover:text-cyan-400 text-slate-400 flex items-center justify-center transition-colors cursor-pointer"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5" aria-hidden="true">
+                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z" />
+                </svg>
+              </a>
+              <a
+                href="https://www.youtube.com/@VoicePodAI"
+                target="_blank"
+                rel="noopener noreferrer"
                 aria-label="YouTube"
                 className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 hover:border-red-500/50 hover:text-red-400 text-slate-400 flex items-center justify-center transition-colors cursor-pointer"
               >
                 <Youtube className="w-3.5 h-3.5" />
-              </a>
-              <a
-                href={`mailto:${OFFICE_INFO.email}`}
-                aria-label="Email"
-                className="w-8 h-8 rounded-lg bg-slate-900 border border-slate-800 hover:border-purple-500/50 hover:text-purple-400 text-slate-400 flex items-center justify-center transition-colors cursor-pointer"
-              >
-                <Mail className="w-3.5 h-3.5" />
               </a>
             </div>
           </div>

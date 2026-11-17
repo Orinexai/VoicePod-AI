@@ -478,8 +478,10 @@ export const RESOURCES_DATA: ResourceItem[] = [
 
 export const OFFICE_INFO = {
   name: 'Tech Future Solutions Ltd',
-  address: 'London, United Kingdom',
+  companyNumber: '16669292',
+  address: '5 Brayford Square, London. E1 0SG',
+  mapUrl: 'https://maps.app.goo.gl/3iRTpQxg8PMXyMG9A',
   email: 'support@voicepod.ai',
-  legalEntity: 'Tech Future Solutions Ltd, registered in England and Wales, company number [NUMBER], registered office [ADDRESS]',
+  legalEntity: 'Tech Future Solutions Ltd, registered in England and Wales, company number 16669292, registered office 5 Brayford Square, London. E1 0SG',
   copyright: '© 2026 VOICEPOD. All rights reserved.'
 };

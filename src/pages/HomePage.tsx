@@ -15,7 +15,9 @@ import {
   TrendingUp, 
   Star,
   Zap,
-  Mail
+  Mail,
+  Loader2,
+  AlertCircle
 } from 'lucide-react';
 import { 
   CORE_FEATURES, 
@@ -28,6 +30,7 @@ import {
 } from '../data/voicepodSiteData';
 import { TestimonialCarousel } from '../components/TestimonialCarousel';
 import { PageId } from '../components/Navbar';
+import { submitToWebhook } from '../utils/webhook';
 
 interface HomePageProps {
   onNavigate: (page: PageId) => void;
@@ -36,6 +39,33 @@ interface HomePageProps {
 export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [isSubscribing, setIsSubscribing] = useState(false);
+  const [newsletterError, setNewsletterError] = useState<string | null>(null);
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newsletterEmail.trim() || isSubscribing) return;
+
+    setIsSubscribing(true);
+    setNewsletterError(null);
+
+    try {
+      await submitToWebhook({
+        path: 'newsletter',
+        name: '',
+        email: newsletterEmail.trim(),
+        company: '',
+        phone: '',
+        message: '',
+      });
+      setIsSubscribed(true);
+      setNewsletterEmail('');
+    } catch {
+      setNewsletterError('Could not subscribe right now. Please try again in a moment.');
+    } finally {
+      setIsSubscribing(false);
+    }
+  };
   return (
     <div className="space-y-0">
       
@@ -682,31 +712,42 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
                   <span>Thank you! You are subscribed to VoicePod updates and engineering releases.</span>
                 </div>
               ) : (
-                <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    if (newsletterEmail) {
-                      setIsSubscribed(true);
-                      setNewsletterEmail('');
-                    }
-                  }}
-                  className="flex flex-col sm:flex-row items-center gap-3 pt-2 max-w-lg"
-                >
-                  <input
-                    type="email"
-                    required
-                    value={newsletterEmail}
-                    onChange={(e) => setNewsletterEmail(e.target.value)}
-                    placeholder="Enter your corporate email address"
-                    className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-xs sm:text-sm text-white focus:outline-none focus:border-cyan-400 transition-colors"
-                  />
-                  <button
-                    type="submit"
-                    className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-400 via-teal-300 to-cyan-400 hover:from-cyan-300 text-slate-950 font-bold text-xs sm:text-sm whitespace-nowrap cursor-pointer shadow-lg shadow-cyan-950 hover:scale-105 transition-all"
+                <div className="space-y-3 pt-2 max-w-lg">
+                  <form
+                    onSubmit={handleNewsletterSubmit}
+                    className="flex flex-col sm:flex-row items-center gap-3"
                   >
-                    Subscribe
-                  </button>
-                </form>
+                    <input
+                      type="email"
+                      required
+                      value={newsletterEmail}
+                      onChange={(e) => setNewsletterEmail(e.target.value)}
+                      placeholder="Enter your corporate email address"
+                      disabled={isSubscribing}
+                      className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-xs sm:text-sm text-white focus:outline-none focus:border-cyan-400 transition-colors disabled:opacity-60"
+                    />
+                    <button
+                      type="submit"
+                      disabled={isSubscribing}
+                      className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-400 via-teal-300 to-cyan-400 hover:from-cyan-300 disabled:opacity-60 disabled:cursor-not-allowed text-slate-950 font-bold text-xs sm:text-sm whitespace-nowrap cursor-pointer shadow-lg shadow-cyan-950 hover:scale-105 transition-all flex items-center justify-center gap-2"
+                    >
+                      {isSubscribing ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>Subscribing...</span>
+                        </>
+                      ) : (
+                        <span>Subscribe</span>
+                      )}
+                    </button>
+                  </form>
+                  {newsletterError && (
+                    <div className="p-2.5 rounded-lg bg-red-500/10 border border-red-500/30 text-red-300 text-xs flex items-center gap-2">
+                      <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
+                      <span>{newsletterError}</span>
+                    </div>
+                  )}
+                </div>
               )}
 
               <div className="flex flex-wrap items-center gap-6 text-[11px] font-mono text-slate-400 pt-1">

@@ -46,7 +46,7 @@ export const PrivacyPolicyPage: React.FC<PrivacyPolicyPageProps> = ({ onNavigate
             <span>1. Data Controller Information</span>
           </div>
           <p className="text-xs sm:text-sm text-slate-300">
-            This Privacy Policy applies to the services and websites operated by <strong className="text-white">Tech Future Solutions Ltd</strong>, registered in England and Wales, company number [NUMBER], registered office [ADDRESS] ("we", "our", or "us").
+            This Privacy Policy applies to the services and websites operated by <strong className="text-white">Tech Future Solutions Ltd</strong>, registered in England and Wales, company number 16669292, registered office 5 Brayford Square, London. E1 0SG ("we", "our", or "us").
           </p>
           <p className="text-xs sm:text-sm text-slate-300">
             For inquiries regarding our data handling or to contact our data protection representative, please write to{' '}

@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { Cookie, X, Shield, ArrowRight } from 'lucide-react';
+import { Cookie, X, ArrowRight, Check } from 'lucide-react';
 import { PageId } from './Navbar';
 
 interface CookieBannerProps {
   onNavigate: (page: PageId) => void;
+  forceOpen?: boolean;
+  onClose?: () => void;
 }
 
-export const CookieBanner: React.FC<CookieBannerProps> = ({ onNavigate }) => {
+export const CookieBanner: React.FC<CookieBannerProps> = ({ onNavigate, forceOpen = false, onClose }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const [savedChoice, setSavedChoice] = useState<'accepted' | 'declined' | null>(null);
 
   useEffect(() => {
-    const consent = localStorage.getItem('voicepod_cookie_consent');
+    const consent = localStorage.getItem('voicepod_cookie_consent') as 'accepted' | 'declined' | null;
+    setSavedChoice(consent);
     if (!consent) {
       // Small timeout to allow initial page render smoothly
       const timer = setTimeout(() => setIsVisible(true), 1200);
@@ -18,14 +22,35 @@ export const CookieBanner: React.FC<CookieBannerProps> = ({ onNavigate }) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (forceOpen) {
+      const consent = localStorage.getItem('voicepod_cookie_consent') as 'accepted' | 'declined' | null;
+      setSavedChoice(consent);
+      setIsVisible(true);
+    }
+  }, [forceOpen]);
+
   const handleAccept = () => {
     localStorage.setItem('voicepod_cookie_consent', 'accepted');
+    setSavedChoice('accepted');
     setIsVisible(false);
+    onClose?.();
   };
 
   const handleDecline = () => {
     localStorage.setItem('voicepod_cookie_consent', 'declined');
+    setSavedChoice('declined');
     setIsVisible(false);
+    onClose?.();
+  };
+
+  const handleDismiss = () => {
+    if (!savedChoice) {
+      localStorage.setItem('voicepod_cookie_consent', 'declined');
+      setSavedChoice('declined');
+    }
+    setIsVisible(false);
+    onClose?.();
   };
 
   if (!isVisible) return null;
@@ -41,18 +66,31 @@ export const CookieBanner: React.FC<CookieBannerProps> = ({ onNavigate }) => {
               <Cookie className="w-4 h-4" />
             </div>
             <div>
-              <h4 className="text-xs font-bold text-white uppercase tracking-wider font-mono">Cookie Consent</h4>
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider font-mono">Cookie Settings</h4>
               <p className="text-[11px] text-cyan-300 font-mono">Tech Future Solutions Ltd</p>
             </div>
           </div>
           <button
-            onClick={handleDecline}
-            className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
+            onClick={handleDismiss}
+            className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors cursor-pointer"
             aria-label="Dismiss banner"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
+
+        {/* Saved preference indicator when reopened */}
+        {savedChoice && (
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-700 text-[11px] font-mono text-slate-300">
+            <Check className="w-3 h-3 text-cyan-400" />
+            <span>
+              Current choice:{' '}
+              <strong className="text-cyan-300">
+                {savedChoice === 'accepted' ? 'Accept All Cookies' : 'Essential Only'}
+              </strong>
+            </span>
+          </div>
+        )}
 
         {/* Description */}
         <p className="text-xs text-slate-300 leading-relaxed font-light">
@@ -64,6 +102,7 @@ export const CookieBanner: React.FC<CookieBannerProps> = ({ onNavigate }) => {
           <button
             onClick={() => {
               onNavigate('privacy-policy');
+              handleDismiss();
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             className="hover:underline flex items-center gap-1 cursor-pointer"
@@ -75,6 +114,7 @@ export const CookieBanner: React.FC<CookieBannerProps> = ({ onNavigate }) => {
           <button
             onClick={() => {
               onNavigate('cookie-policy');
+              handleDismiss();
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             className="hover:underline flex items-center gap-1 cursor-pointer"

@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { Mail, MapPin, Phone, Send, CheckCircle2, ShieldCheck, Sparkles } from 'lucide-react';
+import { Mail, MapPin, Send, CheckCircle2, ShieldCheck, Loader2, AlertCircle } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { OFFICE_INFO, ROBOT_ASSETS } from '../data/voicepodSiteData';
+import { submitToWebhook } from '../utils/webhook';
 
 export const ContactSalesPage: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -15,18 +18,39 @@ export const ContactSalesPage: React.FC = () => {
     message: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+    setSubmitError(null);
+
     try {
-      confetti({
-        particleCount: 80,
-        spread: 70,
-        origin: { y: 0.6 },
-        colors: ['#00f5d4', '#06b6d4', '#683BF2']
+      await submitToWebhook({
+        path: 'demo',
+        name: `${formData.firstName} ${formData.lastName}`.trim(),
+        email: formData.email.trim(),
+        company: formData.company.trim(),
+        phone: formData.phone.trim(),
+        message: formData.message.trim(),
+        useCase: formData.useCase,
       });
+
+      setSubmitted(true);
+      try {
+        confetti({
+          particleCount: 80,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ['#00f5d4', '#06b6d4', '#683BF2']
+        });
+      } catch {
+        // ignore
+      }
     } catch {
-      // ignore
+      setSubmitError('Unable to send your request right now. Please try again or email support@voicepod.ai.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -72,7 +96,14 @@ export const ContactSalesPage: React.FC = () => {
                 <div>
                   <h3 className="text-sm font-bold text-white">Office Address</h3>
                   <p className="text-xs text-cyan-400 font-semibold mt-0.5">{OFFICE_INFO.name}</p>
-                  <p className="text-xs text-slate-300">{OFFICE_INFO.address}</p>
+                  <a
+                    href={OFFICE_INFO.mapUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-slate-300 hover:text-cyan-400 hover:underline transition-colors block"
+                  >
+                    {OFFICE_INFO.address}
+                  </a>
                   <p className="text-[11px] text-slate-500 font-mono mt-0.5">England and Wales · Registered Entity</p>
                 </div>
               </div>
@@ -84,18 +115,32 @@ export const ContactSalesPage: React.FC = () => {
                     <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
                     Tech Future Solutions Ltd · Registered Office
                   </span>
-                  <span className="text-cyan-400">London, UK</span>
+                  <a
+                    href={OFFICE_INFO.mapUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-cyan-400 hover:underline"
+                  >
+                    London, UK
+                  </a>
                 </div>
-                <div className="relative h-44 w-full bg-[#0a0d17]">
+                <div className="relative h-56 w-full bg-[#0a0d17]">
                   <iframe
                     title="Tech Future Solutions Ltd Office Location"
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d158858.47340003058!2d-0.2416815525414674!3d51.52855824177265!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47d8a00baf21de75%3A0x52963a5addd52a99!2sLondon%2C%20UK!5e0!3m2!1sen!2suk!4v1700000000000!5m2!1sen!2suk"
-                    className="w-full h-full border-0 filter invert-[0.88] hue-rotate-180 contrast-[1.2] opacity-80 hover:opacity-100 transition-opacity"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.9223146672093!2d-0.052997023120662554!3d51.51464121017445!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4876032b2e7cb155%3A0x8dacc773f4a77e37!2s5%20Brayford%20Sq%2C%20Stepney%20Green%2C%20London%20E1%200SG!5e0!3m2!1sen!2suk!4v1794942835568!5m2!1sen!2suk"
+                    className="w-full h-full border-0 filter invert-[0.88] hue-rotate-180 contrast-[1.2] opacity-85 hover:opacity-100 transition-opacity"
+                    allowFullScreen
                     loading="lazy"
+                    referrerPolicy="strict-origin-when-cross-origin"
                   />
-                  <div className="absolute bottom-2 left-2 px-2.5 py-1 rounded-lg bg-slate-950/90 border border-cyan-500/40 text-[10px] font-mono text-cyan-300 backdrop-blur-md pointer-events-none">
+                  <a
+                    href={OFFICE_INFO.mapUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="absolute bottom-2 left-2 px-2.5 py-1 rounded-lg bg-slate-950/90 border border-cyan-500/40 text-[10px] font-mono text-cyan-300 backdrop-blur-md hover:border-cyan-400 transition-colors"
+                  >
                     📍 Tech Future Solutions Ltd
-                  </div>
+                  </a>
                 </div>
               </div>
 
@@ -109,17 +154,6 @@ export const ContactSalesPage: React.FC = () => {
                   <a href={`mailto:${OFFICE_INFO.email}`} className="text-xs text-cyan-400 font-mono hover:underline">
                     {OFFICE_INFO.email}
                   </a>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-teal-400 shrink-0">
-                  <Phone className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="text-sm font-bold text-white">Direct Line</h3>
-                  <p className="text-xs text-slate-400 mt-0.5">Global Inquiries</p>
-                  <span className="text-xs text-white font-mono">+1 (800) 864-2324</span>
                 </div>
               </div>
             </div>
@@ -159,7 +193,7 @@ export const ContactSalesPage: React.FC = () => {
                 for details of our security and data-protection measures.
               </p>
               <p className="text-[11px] text-slate-500 font-mono pt-1">
-                Tech Future Solutions Ltd, registered in England and Wales, company number [NUMBER], registered office [ADDRESS].
+                {OFFICE_INFO.legalEntity}.
               </p>
             </div>
           </div>
@@ -257,12 +291,29 @@ export const ContactSalesPage: React.FC = () => {
                     />
                   </div>
 
+                  {submitError && (
+                    <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/30 text-red-300 text-xs flex items-center gap-2">
+                      <AlertCircle className="w-4 h-4 shrink-0 text-red-400" />
+                      <span>{submitError}</span>
+                    </div>
+                  )}
+
                   <button
                     type="submit"
-                    className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-cyan-400 via-teal-300 to-cyan-400 hover:from-cyan-300 text-slate-950 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-xl shadow-cyan-950 transition-all cursor-pointer"
+                    disabled={isSubmitting}
+                    className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-cyan-400 via-teal-300 to-cyan-400 hover:from-cyan-300 disabled:opacity-60 disabled:cursor-not-allowed text-slate-950 font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-xl shadow-cyan-950 transition-all cursor-pointer"
                   >
-                    <Send className="w-4 h-4" />
-                    <span>Submit Message to Sales Team</span>
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span>Sending Request...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4" />
+                        <span>Submit Message to Sales Team</span>
+                      </>
+                    )}
                   </button>
                 </form>
               ) : (

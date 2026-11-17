@@ -49,7 +49,7 @@ export const CookiePolicyPage: React.FC<CookiePolicyPageProps> = ({ onNavigate }
             Cookies are small text files placed on your computer, tablet, or smartphone when you visit a website. They are widely used by service operators to make websites function efficiently, retain your preferences, and provide aggregated analytics to site administrators.
           </p>
           <p>
-            This Cookie Policy explains how <strong className="text-white">Tech Future Solutions Ltd</strong> (registered in England and Wales, company number [NUMBER], registered office [ADDRESS]) utilizes cookies on voicepod.ai.
+            This Cookie Policy explains how <strong className="text-white">Tech Future Solutions Ltd</strong> (registered in England and Wales, company number 16669292, registered office 5 Brayford Square, London. E1 0SG) utilizes cookies on voicepod.ai.
           </p>
         </section>
 
